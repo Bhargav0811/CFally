@@ -1,0 +1,60 @@
+
+body {
+  background-color: #E8ECEF;
+}
+
+.centered {
+    padding-top: 200px;
+    text-align: center;
+}
+
+#loader{
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: #ECE3F0 center;
+  z-index: 999;
+  position: relative;
+}
+.preimg{
+  height: 40%;
+  width: 25%;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.LogoF{
+  width: 7%;
+  margin: 0 0 1% 1%;
+}
+  .navbar{    
+    /* background: linear-gradient(120deg,rgba(163, 235, 177,0.55) 1%, rgba(0,0,0,0) 18%); */
+    background: linear-gradient(120deg,rgba(236, 227, 240,0.5) 1%, rgba(0,0,0,0) 18%);
+  }
+.nav-tabs{
+  font-size: 1.4rem;
+}
+.nav-link{
+  padding: .5rem 12rem;
+}
+.tabs{
+  margin: 1% auto;
+padding-left: 14%;
+padding-right: 14%;
+}
+.cal{
+  height: 80%;
+  width: 72%;
+  margin: 0 auto;
+}
+#calendarTitle {
+  display: none;
+}
+.cal-content{
+  width: 100%;
+  height: 100vh;
+}

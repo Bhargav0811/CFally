@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+<div id="loader">
+    <img class="preimg" src="logoG.gif" alt="Loading..">
+</div>
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+  <img class="LogoF" src="logoF.png" alt="Logo">
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="text" placeholder="Enter your CF ID">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
+  </form>
+</nav>
+<div>
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="Calendar-tab" data-toggle="tab" href="#Calendar" role="tab" aria-controls="Calendar" aria-selected="true">Contest Calendar</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="Explore-tab" data-toggle="tab" href="#Explore" role="tab" aria-controls="Explore" aria-selected="false">Explore Others</a>
+      </li>
+    </ul>
+</div>
+
+<div class="tab-content" id="myTabContent">
+  <div  class="tab-pane cal fade show active" id="Calendar" role="tabpanel" aria-labelledby="Calendar-tab">
+    <iframe class="cal-content" src="https://calendar.google.com/calendar/embed?src=k23j233gtcvau7a8ulk2p360m4@group.calendar.google.com&amp;src=efcajlnqvdqjeoud2spsiphnqk@group.calendar.google.com&amp;color=%237986CB&amp;color=%23B39DDB&amp;ctz=Asia/Kolkata&amp;hl=en&amp;wkst=1" style="margin-top:20px; border: 0" scrolling="no"frameborder="0"></iframe>
+  </div>
+  <div class="tab-pane fade" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
+    Second
+  </div>
+</div>
+
+</div>
+
+
+
+
+<%- include('partials/footer') %>
