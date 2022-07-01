@@ -30,16 +30,22 @@ body {
 .LogoF{
   width: 7%;
   margin: 0 0 1% 1%;
+  height: 7vh;
 }
-  .navbar{    
-    /* background: linear-gradient(120deg,rgba(163, 235, 177,0.55) 1%, rgba(0,0,0,0) 18%); */
-    background: linear-gradient(120deg,rgba(236, 227, 240,0.5) 1%, rgba(0,0,0,0) 18%);
+  .navbar{
+    background: linear-gradient(120deg,rgba(236, 227, 240,0.15) 1%, rgba(0,0,0,0) 18%);
   }
 .nav-tabs{
   font-size: 1.4rem;
 }
 .nav-link{
   padding: .5rem 12rem;
+}
+.login{
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  column-gap: 1rem;
 }
 .tabs{
   margin: 1% auto;
@@ -57,4 +63,31 @@ padding-right: 14%;
 .cal-content{
   width: 100%;
   height: 100vh;
+}
+
+.searchtab{
+  padding-left: 30%;
+padding-right: 30%;
+text-align: center;
+}
+.Searchbox{
+  display: flex;
+  margin: 10% auto;
+}
+.sbox{
+  height: 3rem;
+  width: 45rem;
+  font-size: 1.5rem;
+}
+.tag{
+  width: 9rem;
+  font-size: 1rem;
+}
+.err {
+  width: 40%;
+  text-align: center;
+  padding-top: 2%;
+}
+.errIMG{
+  width: 60%;
 }

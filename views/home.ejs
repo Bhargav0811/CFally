@@ -1,32 +1,66 @@
 <%- include('partials/header') %>
+
+<% if(loadLogo){ %>
 <div id="loader">
     <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
+<% } %>
 <nav class="navbar navbar-dark bg-dark justify-content-between">
-  <img class="LogoF" src="logoF.png" alt="Logo">
+  <img class="LogoF" src="logoFN.png" alt="Logo">
   <form class="form-inline">
-    <input class="form-control mr-sm-2" type="text" placeholder="Enter your CF ID">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
+    <div class="login">
+      <input class="form-control mr-sm-2" type="text" placeholder="Enter your CF ID" autocomplete="off">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
+    </div>
   </form>
 </nav>
 <div>
 <div class="tabs">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="Calendar-tab" data-toggle="tab" href="#Calendar" role="tab" aria-controls="Calendar" aria-selected="true">Contest Calendar</a>
+
+      <a class="nav-link <%=tab===1?'active':''%>" id="Calendar-tab" data-toggle="tab" href="#Calendar" role="tab" aria-controls="Calendar" aria-selected="<%=tab===1?'true':'false'%>">Contest Calendar</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="Explore-tab" data-toggle="tab" href="#Explore" role="tab" aria-controls="Explore" aria-selected="false">Explore Others</a>
+        <a class="nav-link <%=tab===2?'active':''%>" id="Explore-tab" data-toggle="tab" href="#Explore" role="tab" aria-controls="Explore" aria-selected="<%=tab===2?'true':'false'%>">Explore Others</a>
       </li>
     </ul>
 </div>
 
 <div class="tab-content" id="myTabContent">
-  <div  class="tab-pane cal fade show active" id="Calendar" role="tabpanel" aria-labelledby="Calendar-tab">
+  <div  class="tab-pane cal fade <%= tab===1?'show active':''%>" id="Calendar" role="tabpanel" aria-labelledby="Calendar-tab">
     <iframe class="cal-content" src="https://calendar.google.com/calendar/embed?src=k23j233gtcvau7a8ulk2p360m4@group.calendar.google.com&amp;src=efcajlnqvdqjeoud2spsiphnqk@group.calendar.google.com&amp;color=%237986CB&amp;color=%23B39DDB&amp;ctz=Asia/Kolkata&amp;hl=en&amp;wkst=1" style="margin-top:20px; border: 0" scrolling="no"frameborder="0"></iframe>
   </div>
-  <div class="tab-pane fade" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
-    Second
+  <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
+    <form class="search user searchtab" action="/search" method="post">
+      <div class="Searchbox">
+        <input type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <span class="input-group-text border-0" id="search-addon">
+          <i onclick="submit" class="fas fa-search"></i>
+        </span>
+      </div>
+      <input type="radio" onchange="changeType(handle)" value="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
+      <label class="btn btn-outline-success tag" for="T1">By Username</label>
+      <input type="radio"  onchange="changeType(organisation)" value="organisation" class="btn-check" name="options-outlined" id="T2" autocomplete="off">
+      <label class="btn btn-outline-success tag" for="T2">By Organisation</label>
+      <input type="radio" onchange="changeType(city)"  value="city" class="btn-check" name="options-outlined" id="T3" autocomplete="off">
+      <label class="btn btn-outline-success tag" for="T3">By City</label>
+      <!-- <input type="radio" name="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
+      <label class="btn btn-outline-success tag" for="T1">By Username</label>
+      <input type="radio" name="organisation"  class="btn-check" name="options-outlined" id="T2" autocomplete="off">
+      <label class="btn btn-outline-success tag" for="T2">By Organisation</label>
+      <input type="radio" name="city"  class="btn-check" name="options-outlined" id="T3" autocomplete="off">
+
+      <label class="btn btn-outline-success tag" for="T3">By City</label> -->
+    </form>
+    <% if(profile.result.length>0) {%>
+    <%- include('miniprof',{user: profile.result[0]}) %>
+    <% }else if(isErr){ %>
+      <div class="err mx-auto">
+        <img src="er.png" class="errIMG" alt="">
+      </div>
+
+      <% } %>
   </div>
 </div>
 

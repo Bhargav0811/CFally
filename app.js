@@ -1,13 +1,29 @@
 //jshint esversion:6
 // import json
 // import urllib.request
-
 const exp = require("express");
 const bodyp = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const session = require("express-session");
 const findOrCreate = require("mongoose-findorcreate");
+const cookieParser = require("cookie-parser");
+// const $ = require("jquery")
+const curl = require("curl");
+const jsdom = require("jsdom");
+const getJSON = require('get-json')
+// const { JSDOM } = jsdom;
+// var jsdom = require('jsdom');
+const $ = require('jquery')(new jsdom.JSDOM().window);
+// global.document = new JSDOM(html).window.document;
+
+// getJSON('https://codeforces.com/api/user.info?handles=Bhargav0811',function(er,data){
+//   console.log(data)
+// })
+
+// const json = node-fetch('https://codeforces.com/api/user.info?handles=Bhargav0811').then(res => res.json())
+// // var json = parse.to_json('https://codeforces.com/api/user.info?handles=Bhargav0811');
+// console.log(json)
 // const json = require("json")
 // const {request} = require()
 // const jsdom = require("jsdom");
@@ -22,6 +38,13 @@ const app = exp();
 app.use(exp.static("public"));
 app.set("view engine","ejs");
 app.use(bodyp.urlencoded({extended : true}));
+
+app.use(session({
+    secret: "SecretKey",
+    saveUninitialized:true,
+    cookie: { tab: 1,loadLogo: true,isErr: false,profile: {result:[]}},
+    resave: false
+}));
 
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -50,10 +73,13 @@ app.use(bodyp.urlencoded({extended : true}));
 
 // with urllib.request.urlopen(user_URL) as url:
 // 		user_data = json.loads(url.read().decode())
-
+var tab = 1;
+var loadLogo = true;
+var isErr= false;
+var profile = {result:[]}
 
 app.get("/",function(req,res){
-  res.render("home")
+  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr})
 })
 app.get("/submit",function(req,res){
   if(req.isauthenticated()) res.render("submit")
@@ -90,17 +116,30 @@ app.get("/logout",function(req,res){
   res.redirect("/")
 })
 
-app.post("/register",function(req,res){
-
-  user.register({username:  req.body.username},req.body.password,function(err,user){
-    if(err){console.log(err);res.redirect("/register")}
-    else{
-      passport.authenticate("local")(req,res,function(){
-        res.redirect("/secrets");
-      })
+app.post("/search",function(req,res){
+  var target = req.body.searchTarget
+  var type = req.body['options-outlined']
+  getJSON('https://codeforces.com/api/user.info?handles='+target,function(err,data){
+    if(err===null)
+    {
+      profile = {result:data.result};
+      loadLogo = false;
+      tab = 2;
+      isErr= false;
     }
+    else
+    {
+      profile = {result:[]};
+      loadLogo = false;
+      tab = 2;
+      isErr= true;
+    }
+    res.redirect("/");
+    }).catch(error => {
+    console.log(error)
   })
 })
+
 app.post("/login",function(req,res){
   const user = new user({
     username: req.body.username,
