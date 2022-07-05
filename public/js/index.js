@@ -22,7 +22,7 @@ function displayContent() {
     loader.style.display = 'none';
     var con = document.getElementById('content');
     if(con===null)return null
-    con.style.display = 'block';
+    document.getElementById('content').style.display = 'block';
 }
 
 document.addEventListener("DOMContentLoaded", function() {

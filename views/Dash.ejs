@@ -1,0 +1,75 @@
+<%- include('partials/header') %>
+
+<% if(loadLogo){ %>
+<div id="loader">
+    <img class="preimg" src="logoG.gif" alt="Loading..">
+</div>
+<% } %>
+
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+  <img class="LogoF" src="logoFN.png" alt="Logo">
+  <form class="form-inline" method="post" action="/Home">
+    <div class="login">
+      <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'Enter your CF ID'%>" autocomplete="on">
+      <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
+    </div>
+  </form>
+</nav>
+<div class="prof">
+  <div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="C1">
+        <img class="avatar" src="<%=U.titlePhoto%>" alt="">
+      </div>
+    </div>
+    <div class="col-sm">
+    <h1><%=U.firstName!==''?U.firstName:''%>&ensp;<%=U.lastName!==''?U.lastName:''%></h1>
+    <h3><%=U.handle%></h3>
+    <h5>Rank : <%=U.rank%> ( Max : <%=U.maxRank%> )</h5>
+    <p>Organisation : <%=U.organization%></p>
+    <p>City : <%=U.city%></p>
+    </div>
+    <div class="col-sm">
+      <h2>Rating : <%=U.rating%> ( Max : <%=U.maxRating%> )</h2>
+    </div>
+  </div>
+</div>
+</div>
+<div>
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link <%=tab===1?'active':''%>" id="Calendar-tab" data-toggle="tab" href="#Calendar" role="tab" aria-controls="Calendar" aria-selected="<%=tab===1?'true':'false'%>">Friends</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%=tab===2?'active':''%>" id="Explore-tab" data-toggle="tab" href="#Explore" role="tab" aria-controls="Explore" aria-selected="<%=tab===2?'true':'false'%>">Stats</a>
+      </li>
+    </ul>
+</div>
+
+<div class="tab-content" id="myTabContent">
+  <div  class="show active tab-pane cal fade <%= tab===1?'show active':''%>" id="Calendar" role="tabpanel" aria-labelledby="Calendar-tab">
+    <div class="box">
+    <% U.friends.forEach(function(UN,index){ %>      
+        <div class="tile">
+          <h3 class="UN"> <%=UN%></h3>
+          <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
+          <hr class="sep">
+          <h5 class="CR"><%= U.Fr[UN][0] %></h5>
+        </div>
+    <% }) %>
+  </div>
+  </div>
+  <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
+    <h1>Stats</h1>
+    <h2><%=U.stats.AT%> <%=U.stats.LY%> <%=U.stats.LM%> <%=U.stats.RM%> <%=U.stats.RY%></h2>
+  </div>
+</div>
+
+</div>
+
+
+
+
+<%- include('partials/footer') %>

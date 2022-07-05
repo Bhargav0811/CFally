@@ -15,6 +15,7 @@ const getJSON = require('get-json')
 // const { JSDOM } = jsdom;
 // var jsdom = require('jsdom');
 const $ = require('jquery')(new jsdom.JSDOM().window);
+var request = require('request');
 // global.document = new JSDOM(html).window.document;
 
 // getJSON('https://codeforces.com/api/user.info?handles=Bhargav0811',function(er,data){
@@ -77,31 +78,17 @@ var tab = 1;
 var loadLogo = true;
 var isErr= false;
 var profile = {result:[]}
+var logFailed = false;
+var LoggedIn = false;
 
 app.get("/",function(req,res){
-  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr})
+  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed})
 })
 app.get("/submit",function(req,res){
   if(req.isauthenticated()) res.render("submit")
   else res.redirect("/login");
 })
 
-app.post("/submit",function(req,res){
-  const sec = req.body.secret
-  user.findById(req.user.id,function(err,UT){
-    if(err){console.log(err);}
-    else{
-      if(UT)
-      {
-        UT.secret = sec;
-        UT.save();
-        res.redirect("/secrets")
-      }
-
-      }
-
-  })
-})
 app.get("/login",function(req,res){
   res.render("login",{MSG: ""})
 })
@@ -126,6 +113,7 @@ app.post("/search",function(req,res){
       loadLogo = false;
       tab = 2;
       isErr= false;
+      logFailed=false;
     }
     else
     {
@@ -133,6 +121,7 @@ app.post("/search",function(req,res){
       loadLogo = false;
       tab = 2;
       isErr= true;
+      logFailed=true;
     }
     res.redirect("/");
     }).catch(error => {
@@ -140,22 +129,83 @@ app.post("/search",function(req,res){
   })
 })
 
-app.post("/login",function(req,res){
-  const user = new user({
-    username: req.body.username,
-    password: req.body.password
-  })
+var A = []
 
-  req.login(user,function(err){
-    if(err)console.log(err);
-    else{
-      passport.authenticate("local")(req,res,function(){
-        res.redirect("/secrets");
+app.post("/Home",function(req,res){
+  var user = req.body.UN;
+  var P = {};
+  getJSON('https://codeforces.com/api/user.info?handles='+user,function(err,data){
+    if(err===null)
+    {
+      P = data.result[0];
+      getStats(user,function(){
+        P.stats = st;
+        P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
+        P.Fr = {}
+        var Frs = ""
+        P.friends.forEach(function(I,index){
+          Frs+=I+";"
+        })
+        getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
+          data.result.forEach(function(F){
+            P.Fr[F.handle] = [F.rating,F.titlePhoto]
+          })
+          console.log(P.Fr);
+          console.log(P)
+          LoggedIn = true;
+          // console.log(P)
+          res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false})
+        }).catch(error => {
+        console.log(error)
+      })
+
       })
     }
+    else
+    {
+      profile = {result:[]};
+      loadLogo = false;
+      tab = 1;
+      isErr= false;
+      logFailed = true;
+      if(LoggedIn)res.redirect("/Home");
+      else res.redirect("/");
+    }
+
+    }).catch(error => {
+    console.log(error)
   })
 })
 
+var st = {}
+function getStats(ID,callback)
+{
+  var htmldata="";
+
+  request('https://codeforces.com/profile/'+ID, function (error, response, body) {
+    if(error){st = error;console.log(error);}
+    else
+    {
+      htmldata=body;
+    var regex = /<div class="_UserActivityFrame_counterValue">/gi, result, indices = [];
+    while ( (result = regex.exec(htmldata)) ) {
+        indices.push(result.index);
+    }
+    var stats = {}
+    var field = ["AT","LY","LM","RM","RY","RM"]
+    var s = ""
+    indices.forEach(function(i,index){
+      if(index<3)s = " problems</div>";
+      else s = " days</div>";
+      var k = htmldata.indexOf(s,i);
+      stats[field[index]] = parseInt(htmldata.substr(i+45,k-i-45));
+    });
+    st =  stats;
+    }
+    if (typeof callback == "function"){callback();}
+  });
+
+}
 
 app.listen(3000,function(){
   console.log("Server started on port 3000..");

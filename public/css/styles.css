@@ -27,19 +27,24 @@ body {
   transform: translateY(-50%) translateX(-50%);
 }
 
-.LogoF{
+/* .LogoF{
   width: 7%;
   margin: 0 0 1% 1%;
   height: 7vh;
-}
+} */
   .navbar{
     background: linear-gradient(120deg,rgba(236, 227, 240,0.15) 1%, rgba(0,0,0,0) 18%);
   }
 .nav-tabs{
   font-size: 1.4rem;
 }
-.nav-link{
+/* .nav-link{
   padding: .5rem 12rem;
+} */
+.nav-item{
+  width: 50%;
+  text-align: center;
+  font-size: 1.5rem;
 }
 .login{
   display: flex;
@@ -90,4 +95,245 @@ text-align: center;
 }
 .errIMG{
   width: 60%;
+}
+
+.prof{
+  height: 100%;
+  width: auto;
+  padding: 10%;
+  /* background-image: linear-gradient(to right, #fc5c7d, #6a82fb); */
+  /* background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); */
+  /* background-image: radial-gradient(circle farthest-side, #fceabb, #f8b500); */
+background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+/* background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%); */
+}
+.avatar{
+  border-radius: 50%;
+  /* box-shadow: 0px 0px 9px 4px #2BFF88; */
+  -webkit-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+-moz-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+}
+}
+.C1{
+  height: auto;
+  width: 100%;
+}
+
+.box{
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.tile{
+  height: 30vh;
+  width: 20rem;
+  display: inline-block;
+  background-color: cyan;
+  position: relative;
+  margin: 3%;
+  text-align: justify;
+  background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%);
+  border-radius: 7%;
+}
+.pic{
+  z-index: 5;
+  height: 56%;
+  width: 40%;
+  position: relative;
+  border-radius: 50%;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  /* object-fit: none; */
+  object-position: center;
+  box-shadow: inset 0px 0px 30px 30px rgba(0,0,0,0.6);
+  /* background-color: #7ee8fa; */
+}
+.sep{
+  z-index: 4;
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  height: 3% !important;
+  width: 100%;
+  background-color: #E8ECEF;
+  opacity: 1;
+}
+.UN{
+  z-index: 3;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+}
+.CR{
+  z-index: 2;
+  position: absolute;
+  top: 56%;
+  left: 50%;
+}
+
+
+@media (max-width: 1600px) and (min-width :990px)
+{
+.LogoF{
+  width: 7%;
+  margin: 0 0 1% 1%;
+  height: 7vh;
+}
+.login{
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  column-gap: 1rem;
+}
+.loginF{
+  width: 60%;
+  height: 100%;
+}
+.tag {
+  width: 12rem;
+font-size: 1.4rem;
+}
+.tags {
+  width: 100%;
+}
+.cal-content{
+  height: 70vh;
+width: 100%;
+margin: 0 auto;
+}
+.preimg{
+  height: 39%;
+  width: 27%;
+}
+
+}
+
+@media (max-width: 989px) and (min-width:769px) {
+.LogoF{
+  width: 12%;
+  margin: 0 0 1% 1%;
+  height: 8vh;
+}
+.login{
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  column-gap: 1rem;
+}
+.loginF{
+  width: 60%;
+  height: 100%;
+}
+.nav-item{
+  font-size: 1.5rem;
+}
+.errIMG{
+  width: 100%;
+}
+.tag {
+  width: 55%;
+font-size: 1.2rem;
+}
+.tags {
+  width: 100%;
+}
+.cal-content{
+  width: 100%;
+margin: 0 auto;
+height: 70vh;
+}
+.preimg{
+  height: 33%;
+  width: 34%;
+}
+}
+
+@media (max-width: 768px) and (min-width:401px) {
+  .LogoF {
+    width: 13%;
+    margin: 0 0 1% 1%;
+    height: 7vh;
+  }
+  .login{
+    display: flex;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    column-gap: 1rem;
+  }
+  .loginF{
+    width: 60%;
+    height: 100%;
+  }
+  .nav-item{
+    font-size: 1rem;
+  }
+  .sbox {
+    height: 3rem;
+  width: 35rem;
+  font-size: 1rem;
+}
+.errIMG{
+  width: 135%;
+}
+.tag {
+  width: 77%;
+}
+.tags {
+  width: 100%;
+}
+.cal-content{
+  height: 70vh;
+width: 100%;
+margin: 0 auto;
+}
+.preimg{
+  height: 23%;
+width: 39%;
+}
+}
+
+@media (max-width: 400px) and (min-width:0px) {
+
+
+  .LogoF {
+    width: 17%;
+    margin: 0 0 1% 1%;
+    height: 5vh;
+  }
+  .login{
+    display: flex;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    column-gap: 1rem;
+  }
+  .loginF{
+    width: 60%;
+    height: 100%;
+  }
+  .nav-item{
+    font-size: 1rem;
+  }
+  .sbox {
+    height: 3rem;
+  width: 35rem;
+  font-size: 1rem;
+}
+.errIMG{
+  width: 135%;
+}
+.tag {
+  width: 78%;
+font-size: 1rem;
+}
+.tags {
+  width: 100%;
+}
+.cal-content{
+  height: 80%;
+  width: 72%;
+  margin: 0 auto;
+}
 }

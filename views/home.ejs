@@ -5,12 +5,14 @@
     <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
 <% } %>
+
+<!-- ::placeholder {color: red;opacity: 1;},:-ms-input-placeholder {color: red;},::-ms-input-placeholder {color: red;} -->
 <nav class="navbar navbar-dark bg-dark justify-content-between">
   <img class="LogoF" src="logoFN.png" alt="Logo">
-  <form class="form-inline">
+  <form class="form-inline" method="post" action="/Home">
     <div class="login">
-      <input class="form-control mr-sm-2" type="text" placeholder="Enter your CF ID" autocomplete="off">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
+      <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'Enter your CF ID'%>" autocomplete="on">
+      <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
     </div>
   </form>
 </nav>
@@ -39,12 +41,15 @@
           <i onclick="submit" class="fas fa-search"></i>
         </span>
       </div>
-      <input type="radio" onchange="changeType(handle)" value="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
-      <label class="btn btn-outline-success tag" for="T1">By Username</label>
-      <input type="radio"  onchange="changeType(organisation)" value="organisation" class="btn-check" name="options-outlined" id="T2" autocomplete="off">
-      <label class="btn btn-outline-success tag" for="T2">By Organisation</label>
-      <input type="radio" onchange="changeType(city)"  value="city" class="btn-check" name="options-outlined" id="T3" autocomplete="off">
-      <label class="btn btn-outline-success tag" for="T3">By City</label>
+      <div class="tags">
+        <input type="radio" onchange="changeType(handle)" value="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
+        <label class="btn btn-outline-success tag" for="T1">By Username</label>
+        <input type="radio"  onchange="changeType(organisation)" value="organisation" class="btn-check" name="options-outlined" id="T2" autocomplete="off">
+        <label class="btn btn-outline-success tag" for="T2">By Organisation</label>
+        <input type="radio" onchange="changeType(city)"  value="city" class="btn-check" name="options-outlined" id="T3" autocomplete="off">
+        <label class="btn btn-outline-success tag" for="T3">By City</label>
+      </div>
+
       <!-- <input type="radio" name="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
       <label class="btn btn-outline-success tag" for="T1">By Username</label>
       <input type="radio" name="organisation"  class="btn-check" name="options-outlined" id="T2" autocomplete="off">
