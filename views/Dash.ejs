@@ -15,7 +15,7 @@
     </div>
   </form>
 </nav>
-<div class="prof">
+<div class="prof"  style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
   <div class="container">
   <div class="row">
     <div class="col-sm">
@@ -24,14 +24,19 @@
       </div>
     </div>
     <div class="col-sm">
-    <h1><%=U.firstName!==''?U.firstName:''%>&ensp;<%=U.lastName!==''?U.lastName:''%></h1>
+    <h1><%=U.hasOwnProperty("firstName")?U.firstName:''%>&ensp;<%=U.hasOwnProperty("lastName")?U.lastName:''%></h1>
     <h3><%=U.handle%></h3>
     <h5>Rank : <%=U.rank%> ( Max : <%=U.maxRank%> )</h5>
-    <p>Organisation : <%=U.organization%></p>
-    <p>City : <%=U.city%></p>
+    <p><%=U.hasOwnProperty("organization")?"Organisation : "+U.organization:''%></p>
+    <p><%=U.hasOwnProperty("organization")?"City : "+U.city:''%></p>
+
     </div>
     <div class="col-sm">
       <h2>Rating : <%=U.rating%> ( Max : <%=U.maxRating%> )</h2>
+      <div class="options">
+        <a href="#myTabContent"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p>  </a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -40,19 +45,19 @@
 <div class="tabs">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link <%=tab===1?'active':''%>" id="Calendar-tab" data-toggle="tab" href="#Calendar" role="tab" aria-controls="Calendar" aria-selected="<%=tab===1?'true':'false'%>">Friends</a>
+      <a class="nav-link <%=tab===1?'active':''%>" id="Friend-tab" data-toggle="tab" href="#Friend" role="tab" aria-controls="Friend" aria-selected="<%=tab===1?'true':'false'%>">Friends</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%=tab===2?'active':''%>" id="Explore-tab" data-toggle="tab" href="#Explore" role="tab" aria-controls="Explore" aria-selected="<%=tab===2?'true':'false'%>">Stats</a>
+        <a class="nav-link <%=tab===2?'active':''%>" id="Stats-tab" data-toggle="tab" href="#Stats" role="tab" aria-controls="Stats" aria-selected="<%=tab===2?'true':'false'%>">Stats</a>
       </li>
     </ul>
 </div>
 
 <div class="tab-content" id="myTabContent">
-  <div  class="show active tab-pane cal fade <%= tab===1?'show active':''%>" id="Calendar" role="tabpanel" aria-labelledby="Calendar-tab">
+  <div  class="show active tab-pane Frs fade <%= tab===1?'show active':''%>" id="Friend" role="tabpanel" aria-labelledby="Friend-tab">
     <div class="box">
-    <% U.friends.forEach(function(UN,index){ %>      
-        <div class="tile">
+    <% U.friends.forEach(function(UN,index){ %>
+        <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
           <h3 class="UN"> <%=UN%></h3>
           <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
           <hr class="sep">
@@ -61,15 +66,37 @@
     <% }) %>
   </div>
   </div>
-  <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
-    <h1>Stats</h1>
-    <h2><%=U.stats.AT%> <%=U.stats.LY%> <%=U.stats.LM%> <%=U.stats.RM%> <%=U.stats.RY%></h2>
+  <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Stats" role="tabpanel" aria-labelledby="Stats-tab">
+    <div class="box">
+      <% U.stats.forEach(function(set,index){ %>
+        <div style="background-image: url('../stat<%=backList[index]%>.png');" class="statBox">
+          <h3 class="statField"> <%=set[0]%>  </h3>
+          <h5 class="statValue"><%=set[1]%></h5>
+        </div>
+      <% }) %>
+    </div>
+    <!-- <div class="chart">
+      <h1>Chart</h1>
+      <div id="chartIMG">
+        <img src="" alt="">
+      </div>
+
+    </div> -->
+    <!-- <h1>Stats</h1>
+    <h2></h2> -->
+
   </div>
 </div>
 
 </div>
 
-
+<script type="text/javascript">
+  var data = [{x:U.dates,y:U.ratingsList,mode:"scatter"}]
+var layout = { title: 'Scroll and Zoom', showlegend: false }
+  console.log(data)
+  console.log(layout)
+</script>
+  <!-- Plotly.newPlot("chartIMG", data, layout, {scrollZoom: true}) -->
 
 
 <%- include('partials/footer') %>

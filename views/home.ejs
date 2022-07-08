@@ -37,9 +37,9 @@
     <form class="search user searchtab" action="/search" method="post">
       <div class="Searchbox">
         <input type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-        <span class="input-group-text border-0" id="search-addon">
-          <i onclick="submit" class="fas fa-search"></i>
-        </span>
+        <button type="submit" onclick="submit" class="input-group-text border-0" id="search-addon">
+          <i class="fas fa-search"></i>
+        </button>
       </div>
       <div class="tags">
         <input type="radio" onchange="changeType(handle)" value="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>

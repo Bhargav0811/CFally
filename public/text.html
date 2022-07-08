@@ -1,0 +1,215 @@
+<html>
+<head>
+  <title>Temp</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <style media="screen">
+
+  body {
+    background-color: #E8ECEF;
+  }
+
+  .centered {
+      padding-top: 200px;
+      text-align: center;
+  }
+
+  #loader{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #ECE3F0 center;
+    z-index: 999;
+    position: relative;
+  }
+  .preimg{
+    height: 40%;
+    width: 25%;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+  }
+
+  .LogoF{
+    width: 7%;
+    margin: 0 0 1% 1%;
+  }
+    .navbar{
+      background: linear-gradient(120deg,rgba(236, 227, 240,0.15) 1%, rgba(0,0,0,0) 18%);
+    }
+  .nav-tabs{
+    font-size: 1.4rem;
+  }
+  .nav-link{
+    padding: .5rem 12rem;
+  }
+  .login{
+    display: flex;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    column-gap: 1rem;
+  }
+  .tabs{
+    margin: 1% auto;
+  padding-left: 14%;
+  padding-right: 14%;
+  }
+  .cal{
+    height: 80%;
+    width: 72%;
+    margin: 0 auto;
+  }
+  #calendarTitle {
+    display: none;
+  }
+  .cal-content{
+    width: 100%;
+    height: 100vh;
+  }
+  .searchtab{
+    padding-left: 30%;
+  padding-right: 30%;
+  text-align: center;
+  }
+  .Searchbox{
+    display: flex;
+    margin: 10% auto;
+  }
+  .sbox{
+    height: 3rem;
+    width: 45rem;
+    font-size: 1.5rem;
+  }
+  .tag{
+    width: 9rem;
+    font-size: 1rem;
+  }
+  .prof{
+    height: 100%;
+    width: auto;
+    padding: 10%;
+    /* background-image: linear-gradient(to right, #fc5c7d, #6a82fb); */
+    /* background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); */
+    /* background-image: radial-gradient(circle farthest-side, #fceabb, #f8b500); */
+background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+/* background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%); */
+/* background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+background-image: linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
+background-image: linear-gradient(19deg, #3EECAC 0%, #EE74E1 100%);
+background-image: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
+background-image: linear-gradient(132deg, #F4D03F 0%, #16A085 100%);
+background-image: linear-gradient(90deg, #FEE140 0%, #FA709A 100%); */
+
+  }
+  .avatar{
+    border-radius: 50%;
+    /* box-shadow: 0px 0px 9px 4px #2BFF88; */
+    -webkit-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+-moz-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+  }
+}
+  .C1{
+    height: auto;
+    width: 100%;
+  }
+  .box{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+  }
+
+  .statBox{
+    display: inline-block;
+    text-align: justify;
+    background-image: url("stat5.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 19%;
+    height: 41vh;
+    text-align: center;
+    margin: 0 1%;
+  }
+  .pic{
+    z-index: 5;
+    height: 56%;
+    width: 40%;
+    position: relative;
+    border-radius: 50%;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    /* object-fit: none; */
+    object-position: center;
+    box-shadow: inset 0px 0px 30px 30px rgba(0,0,0,0.6);
+    /* background-color: #7ee8fa; */
+  }
+  .sep{
+    z-index: 4;
+    position: absolute;
+    top: 42%;
+    transform: translateY(-50%);
+    height: 3% !important;
+    width: 100%;
+    background-color: #E8ECEF;
+    opacity: 1;
+  }
+  .statFeild{
+    font-size: 175%;
+    font-weight: bolder;
+    color: white;
+    position: relative;
+    top: 26%;
+  }
+  .statValue{
+    font-size: 3.3rem;
+    font-weight: bolder;
+    color: black;
+    position: relative;
+    top: 41%;
+}
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="statBox">
+      <h3 class="statFeild">All Time</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+    <div class="statBox">
+      <h3 class="statFeild">Last Year</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+    <div class="statBox">
+      <h3 class="statFeild">Last Month</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+    <br>
+    <div class="statBox">
+      <h3 class="statFeild">In Row(Max)</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+    <div class="statBox">
+      <h3 class="statFeild">In Row(Month)</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+    <div class="statBox">
+      <h3 class="statFeild">In Row(Year)</h3>
+      <h5 class="statValue">156</h5>
+    </div>
+  </div>
+</body>
+</html>

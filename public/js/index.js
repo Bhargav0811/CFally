@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
     loadNow(1);
 });
 
+
 // with urllib.request.urlopen("https://codeforces.com/api/user.info?handles=Bhargav0811") as url:
 // 		var user_data = json.loads(url.read().decode())
 //     console.log(user_data)
