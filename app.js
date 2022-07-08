@@ -15,7 +15,10 @@ const fs = require("fs");
 // const $ = require("jquery")
 const curl = require("curl");
 const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 const getJSON = require('get-json')
+
+
 // const { JSDOM } = jsdom;
 // var jsdom = require('jsdom');
 const $ = require('jquery')(new jsdom.JSDOM().window);
@@ -83,55 +86,21 @@ var loadLogo = true;
 var isErr= false;
 var profile = {result:[]}
 var logFailed = false;
-var LoggedIn = false;
-var URLs = {}
+var loggedIn = false;
+var profSearched = false;
 
 app.get("/",function(req,res){
   res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed})
 })
-app.get("/submit",function(req,res){
-  if(req.isauthenticated()) res.render("submit")
-  else res.redirect("/login");
-})
-
-app.get("/login",function(req,res){
-  res.render("login",{MSG: ""})
-})
-app.get("/register",function(req,res){
-  res.render("register",{MSG: ""})
-})
-
-
-
-app.get("/logout",function(req,res){
-  req.logout();
-  res.redirect("/")
-})
 
 app.post("/search",function(req,res){
-  var target = req.body.searchTarget
-  var type = req.body['options-outlined']
-  getJSON('https://codeforces.com/api/user.info?handles='+target,function(err,data){
-    if(err===null)
-    {
-      profile = {result:data.result};
-      loadLogo = false;
-      tab = 2;
-      isErr= false;
-      logFailed=false;
-    }
-    else
-    {
-      profile = {result:[]};
-      loadLogo = false;
-      tab = 2;
-      isErr= true;
-      logFailed=true;
-    }
+  var target = req.body.searchTarget;
+  // var type = req.body['options-outlined']
+  // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched);
+  searchProf(target,function(){
     res.redirect("/");
-    }).catch(error => {
-    console.log(error)
-  })
+  });
+
 })
 
 var A = []
@@ -149,9 +118,19 @@ var Backs = [
 "132deg, #F4D03F 0%, #16A085 100%",
 "90deg, #FEE140 0%, #FA709A 100%" ]
 
+var P = {};
+var backList = [];
+
+
+app.get("/Home",function(req,res){
+  if(loggedIn) {
+    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr});
+  }
+  else{ res.redirect("/")}
+})
 app.post("/Home",function(req,res){
   var user = req.body.UN;
-  var P = {};
+
   getJSON('https://codeforces.com/api/user.info?handles='+user,function(err,data){
     if(err===null)
     {
@@ -163,27 +142,11 @@ app.post("/Home",function(req,res){
 
           P.ratingsList = Rs.result.map((a) => a.newRating)
           P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds)
-          // var data = [{
-          //               x:dates,
-          //               y:P.ratingsList,
-          //               mode:"scatter"
-          //             }];
-          //   var layout = {
-          //       title: 'Scroll and Zoom',
-          //       showlegend: false
-          //   };
-          // // plot(P.ratingsList).renderImage("public/"+P.handle+".png");
-          // // URLs.chartURL = P.handle+".png";
-          //
-          // // const imgDIV = document.getElementById("chartIMG");
-          // // console.log(imgDIV);
-          // Plotly.newPlot("chartIMG", data, layout, {scrollZoom: true});
-          // Plotly.plot("chart", [trace1])
-          // plot(P.ratingsList).renderDOM(imgDIV);
+          P.Profsearched = false;
           P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
           P.Fr = {}
           var Frs = ""
-          var backList =  Array.from({length: 8}, (_, i) => i + 1)
+          backList =  Array.from({length: 8}, (_, i) => i + 1)
           // console.log(backList);
           backList =  backList.sort(() => Math.random() - 0.5)
           // console.log(backList);
@@ -195,9 +158,10 @@ app.post("/Home",function(req,res){
               if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
               P.Fr[F.handle] = [F.rating,F.titlePhoto]
             })
-            LoggedIn = true;
+            loggedIn = true;
             // console.log(P)
-            res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
+            res.redirect("/Home")
+            // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
 
             }).catch(error => {console.log(error)})
             // console.log(P.Fr);
@@ -212,19 +176,57 @@ app.post("/Home",function(req,res){
       tab = 1;
       isErr= false;
       logFailed = true;
-      if(LoggedIn)res.redirect("/Home");
+      if(loggedIn)res.redirect("/Home");
       else res.redirect("/");
     }
-
     }).catch(error => {console.log(error)})
 })
 
+app.post("/Home/Search",function(req,res){
+
+  var target = req.body.searchTarget
+  profSearched = true;
+  // var type = req.body['options-outlined']
+  // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
+  searchProf(target,function(){
+    res.redirect("/Home");
+  });
+})
+
+function searchProf(target,callback)
+{
+  getJSON('https://codeforces.com/api/user.info?handles='+target,function(err,data){
+    if(err===null)
+    {
+      console.log("Hello-Got");
+      profile = {result:data.result};
+      loadLogo = false;
+      tab = 2;
+      isErr= false;
+      logFailed=false;
+    }
+    else
+    {
+      console.log("Hello-Failed");
+      profile = {result:[]};
+      loadLogo = false;
+      tab = 2;
+      isErr= true;
+      logFailed=false;
+    }
+    if (typeof callback == "function"){callback();}
+    }).catch(error => {
+    console.log(error)
+  })
+
+}
 function changeTab(a)
 {
   tab=a;
 }
 
 var st = []
+
 function getStats(ID,callback)
 {
   var htmldata="";
@@ -256,10 +258,30 @@ function getStats(ID,callback)
 
 }
 
+
+app.listen(3000,function(){
+  console.log("Server started on port 3000..");
+});
+
+// var data = [{
+//               x:dates,
+//               y:P.ratingsList,
+//               mode:"scatter"
+//             }];
+//   var layout = {
+//       title: 'Scroll and Zoom',
+//       showlegend: false
+//   };
+// // plot(P.ratingsList).renderImage("public/"+P.handle+".png");
+// // URLs.chartURL = P.handle+".png";
+//
+// // const imgDIV = document.getElementById("chartIMG");
+// // console.log(imgDIV);
+// Plotly.newPlot("chartIMG", data, layout, {scrollZoom: true});
+// Plotly.plot("chart", [trace1])
+// plot(P.ratingsList).renderDOM(imgDIV);
+
 // <%# <% var data = [{x:U.dates,y:U.ratingsList,mode:"scatter"}] %> %>
 // <%# <% var layout = { title: 'Scroll and Zoom', showlegend: false } %> %>
 // <%# <%    console.log(data) %> %>
 // <%# <%    console.log(layout) %> %>
-app.listen(3000,function(){
-  console.log("Server started on port 3000..");
-});

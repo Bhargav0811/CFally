@@ -20,6 +20,7 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "get-json": "^1.0.1",
+    "getelementsbyid": "^1.0.0",
     "jquery": "^3.6.0",
     "jsdom": "^20.0.0",
     "md5": "^2.3.0",
@@ -38,7 +39,9 @@
     "plotly.js-dist": "^2.12.1",
     "plotly.js-dist-min": "^2.12.1",
     "request": "^2.88.2",
-    "url-json-parser": "^1.0.3"
+    "scroll-to-element": "^2.0.3",
+    "url-json-parser": "^1.0.3",
+    "window": "^4.2.7"
   },
   "description": "",
   "devDependencies": {

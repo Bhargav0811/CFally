@@ -5,7 +5,6 @@
     <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
 <% } %>
-
 <nav class="navbar navbar-dark bg-dark justify-content-between">
   <img class="LogoF" src="logoFN.png" alt="Logo">
   <form class="form-inline" method="post" action="/Home">
@@ -55,7 +54,25 @@
 
 <div class="tab-content" id="myTabContent">
   <div  class="show active tab-pane Frs fade <%= tab===1?'show active':''%>" id="Friend" role="tabpanel" aria-labelledby="Friend-tab">
+    <form class="search user searchtab" action="/Home/Search" method="post">
+      <div class="Searchbox">
+        <input type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="submit" onclick="submit" class="input-group-text border-0" id="search-addon">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
     <div class="box">
+      <% if(profSearched){ %>
+        <% if(profile.result.length>0) {%>
+        <%- include('miniprof',{user: profile.result[0]}) %>
+        <% }else if(isErr){ %>
+          <div class="err mx-auto">
+            <img src="er.png" class="errIMG" alt="">
+          </div>
+
+          <% } %>
+      <% }else{ %>
     <% U.friends.forEach(function(UN,index){ %>
         <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
           <h3 class="UN"> <%=UN%></h3>
@@ -63,7 +80,7 @@
           <hr class="sep">
           <h5 class="CR"><%= U.Fr[UN][0] %></h5>
         </div>
-    <% }) %>
+    <% })} %>
   </div>
   </div>
   <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Stats" role="tabpanel" aria-labelledby="Stats-tab">

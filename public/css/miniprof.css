@@ -50,6 +50,9 @@ body {
 .img-radius {
     border-radius: 50%;
     height: 20vh;
+    width: 20vh;
+    object-fit: fill;
+    object-position: center;
 }
 
 
