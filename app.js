@@ -18,11 +18,17 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const getJSON = require('get-json')
 
+const { window } = new JSDOM();
+var { document } = (new JSDOM('')).window;
+global.document = document;
+var $ = require("jquery")(window);
+
 
 // const { JSDOM } = jsdom;
 // var jsdom = require('jsdom');
-const $ = require('jquery')(new jsdom.JSDOM().window);
 var request = require('request');
+
+
 // global.document = new JSDOM(html).window.document;
 
 // getJSON('https://codeforces.com/api/user.info?handles=Bhargav0811',function(er,data){
@@ -89,6 +95,8 @@ var logFailed = false;
 var loggedIn = false;
 var profSearched = false;
 
+var dom;
+
 app.get("/",function(req,res){
   res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed})
 })
@@ -123,11 +131,45 @@ var backList = [];
 
 
 app.get("/Home",function(req,res){
+
   if(loggedIn) {
-    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr});
+    if(profSearched){loadLogo=false;}
+    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr})
+    // if(profSearched)
+    // {
+    //   console.log("Inside Home");
+    //   toggle();console.log("Toggled Outside");
+    //   loadLogo=false
+    //   res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr})
+    // }
+    // else
+    // {
+    //   res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr},function(err,result){
+    //   // console.log(result);
+    //   document =  (new JSDOM(result)).window.document;
+    //   global.document = document;
+    //   // console.log(document.getElementsByTagName('html')[0].innerHTML);
+    //   // console.log(global.document.getElementsByTagName('html')[0].innerHTML);
+    //   console.log(document.getElementById('blur').classList);
+    //   console.log(document.getElementById('popup').classList);
+    //   res.send(result);
+    // });
+    // }
   }
   else{ res.redirect("/")}
 })
+
+function toggle() {
+    // var { document } = (new JSDOM()).window;
+    // global.document = document;
+    var blur=global.document.getElementById('blur');
+    // $('#blur').toggleClass('active');
+    blur.classList.toggle('active');
+    var popup = global.document.getElementById('popup');
+    popup.classList.toggle('active');
+    // $('#popup').toggleClass('active');
+    console.log("Toggled Inside");
+}
 app.post("/Home",function(req,res){
   var user = req.body.UN;
 
@@ -183,14 +225,23 @@ app.post("/Home",function(req,res){
 })
 
 app.post("/Home/Search",function(req,res){
-
-  var target = req.body.searchTarget
-  profSearched = true;
-  // var type = req.body['options-outlined']
-  // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
-  searchProf(target,function(){
+  if(profSearched===true)
+  {
+    profile = {result:[]};
+    profSearched=false;
     res.redirect("/Home");
-  });
+  }
+  else
+  {
+    var target = req.body.searchTarget;
+    profSearched = true;
+    // var type = req.body['options-outlined']
+    // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
+    searchProf(target,function(){
+      console.log("Redirecting to Home")
+      res.redirect("/Home");
+    });
+  }
 })
 
 function searchProf(target,callback)
@@ -218,7 +269,6 @@ function searchProf(target,callback)
     }).catch(error => {
     console.log(error)
   })
-
 }
 function changeTab(a)
 {

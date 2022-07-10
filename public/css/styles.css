@@ -195,10 +195,42 @@ box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,
   top: 56%;
   left: 50%;
 }
-
-.Frs{
-
+.searchResult{
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+    background: #fff;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    border-radius: 3%;
 }
+.searchResult .row{
+    --bs-gutter-x: 0rem !important;}
+.searchResult .padding .row .col-md-12 {
+      width: 100%;
+    }
+/* .searchResult .row *{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+} */
+.searchResult .padding{ padding: 0 !important;}
+
+
+.closeSearchedProf{
+  z-index: 2;
+  position: absolute;
+  right: 0;
+}
+.closeSearchedProf .closeBTN{
+  font-size: 1.3rem;
+background: rgba(0,0,0,0);
+border: 0;
+color: #383940;
+}
+
 .chart{
   text-align: center;
 width: 80%;

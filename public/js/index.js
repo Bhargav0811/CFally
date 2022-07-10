@@ -2,9 +2,6 @@
 
 
 console.log("Hello There");
-// $(window).load(function() {
-//     $('#loading').hide();
-//   });
 var loader;
 
 function loadNow(opacity) {
@@ -30,6 +27,24 @@ document.addEventListener("DOMContentLoaded", function() {
     if(loader===null)return null
     loadNow(1);
 });
+function toggle() {
+    var blur=document.getElementById('blur');
+
+    blur.classList.toggle('active');
+    var popup = document.getElementById('popup');
+    popup.classList.toggle('active');
+    console.log("Toggled");
+}
+// $(document).ready(function() {
+//     $('.searchtab').submit(function(e) {
+//         e.preventDefault();
+//         toggle();
+//     });
+// });
+ // module.exports = {
+ //   toggle: toggle,
+ //
+ // }
 
 
 // with urllib.request.urlopen("https://codeforces.com/api/user.info?handles=Bhargav0811") as url:
