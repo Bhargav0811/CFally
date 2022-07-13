@@ -4,6 +4,7 @@
 const exp = require("express");
 const bodyp = require("body-parser");
 const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 const ejs = require("ejs");
 const session = require("express-session");
 const findOrCreate = require("mongoose-findorcreate");
@@ -77,7 +78,8 @@ app.use(session({
 
 // const usersch = new mongoose.Schema({
 //   username: String,
-//   password: String
+//   password: String,
+//  friends: [String]
 // })
 //
 // usersch.plugin(findOrCreate);
@@ -87,6 +89,18 @@ app.use(session({
 
 // with urllib.request.urlopen(user_URL) as url:
 // 		user_data = json.loads(url.read().decode())
+
+mongoose.connect("mongodb://localhost:27017/CFally",{useNewUrlParser: true});
+const usersch = new mongoose.Schema({
+  username: String,
+  password: String,
+  friends: [String]
+})
+
+usersch.plugin(findOrCreate);
+
+const user = mongoose.model("user",usersch)
+
 var tab = 1;
 var loadLogo = true;
 var isErr= false;
@@ -94,10 +108,12 @@ var profile = {result:[]}
 var logFailed = false;
 var loggedIn = false;
 var profSearched = false;
+var warningMSG = ""
 
 var dom;
 
 app.get("/",function(req,res){
+  loggedIn=false;
   res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed})
 })
 
@@ -135,26 +151,8 @@ app.get("/Home",function(req,res){
   if(loggedIn) {
     if(profSearched){loadLogo=false;}
     res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr})
-    // if(profSearched)
-    // {
-    //   console.log("Inside Home");
-    //   toggle();console.log("Toggled Outside");
-    //   loadLogo=false
-    //   res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr})
-    // }
-    // else
-    // {
-    //   res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr},function(err,result){
-    //   // console.log(result);
     //   document =  (new JSDOM(result)).window.document;
     //   global.document = document;
-    //   // console.log(document.getElementsByTagName('html')[0].innerHTML);
-    //   // console.log(global.document.getElementsByTagName('html')[0].innerHTML);
-    //   console.log(document.getElementById('blur').classList);
-    //   console.log(document.getElementById('popup').classList);
-    //   res.send(result);
-    // });
-    // }
   }
   else{ res.redirect("/")}
 })
@@ -171,21 +169,55 @@ function toggle() {
     console.log("Toggled Inside");
 }
 app.post("/Home",function(req,res){
-  var user = req.body.UN;
-
-  getJSON('https://codeforces.com/api/user.info?handles='+user,function(err,data){
+  var userN = req.body.UN;
+  var pass = req.body.PS;
+  console.log(req.body);
+  getJSON('https://codeforces.com/api/user.info?handles='+userN,function(err,data){
     if(err===null)
     {
       P = data.result[0];
+
+      if(!('OPT' in req.body))
+      {
+        const U1 = new user({username:userN,password:pass,friends:["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya"]})
+        P.friends =  U1.friends;
+        U1.save();
+      }
+      else
+      {
+        user.find({username:userN,password:pass},function (err, docs){
+          if (err)console.log(err);
+          else{
+            console.log(docs);
+            if(docs.length===0)
+            {
+              console.log("First Signup..");
+              profile = {result:[]};
+              loadLogo = false;
+              tab = 1;
+              isErr= false;
+              logFailed = true;
+              if(loggedIn)res.redirect("/Home");
+              else res.redirect("/");
+            }
+            else
+            {
+              P.friends =  docs[0].friends
+            }
+
+            }})
+
+        // P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
+      }
       if(P.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")P.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-      getStats(user,function(){
+      getStats(userN,function(){
         P.stats = st;
-        getJSON('https://codeforces.com/api/user.rating?handle='+user,function(err,Rs){
+        getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
 
           P.ratingsList = Rs.result.map((a) => a.newRating)
           P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds)
           P.Profsearched = false;
-          P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
+
           P.Fr = {}
           var Frs = ""
           backList =  Array.from({length: 8}, (_, i) => i + 1)

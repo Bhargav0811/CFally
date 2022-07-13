@@ -8,13 +8,27 @@
 
 <!-- ::placeholder {color: red;opacity: 1;},:-ms-input-placeholder {color: red;},::-ms-input-placeholder {color: red;} -->
 <nav class="navbar navbar-dark bg-dark justify-content-between">
-  <img class="LogoF" src="logoFN.png" alt="Logo">
-  <form class="form-inline" method="post" action="/Home">
-    <div class="login">
-      <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'Enter your CF ID'%>" autocomplete="on">
-      <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
+  <div class="row">
+    <div class="col-sm nav1">
+      <img class="LogoF" src="logoFN.png" alt="Logo">
     </div>
-  </form>
+    <div class="col-lg nav2">
+      <form class="form-inline" method="post" action="/Home">
+        <div id="loginData" class="login">
+          <div class="form-check form-switch">
+            <label class="form-check-label">Sign up</label>
+            <input name="OPT" class="form-check-input" id="OPTbtn" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked="false">
+            <label class="form-check-label" >Login</label>
+          </div>
+          <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
+          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'CF ID'%>" autocomplete="on">
+          <input type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password">
+          <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </nav>
 <div>
 <div class="tabs">
