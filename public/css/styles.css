@@ -133,6 +133,11 @@ text-align: center;
   text-align: center;
   padding-top: 2%;
 }
+.err1 {
+  width: 100%;
+  text-align: center;
+  padding-top: 2%;
+}
 .errIMG{
   width: 60%;
 }
@@ -190,13 +195,16 @@ box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
   display: inline-block;
   background-color: cyan;
   position: relative;
-  margin: 3%;
   text-align: justify;
   /* background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%); */
   border-radius: 7%;
   -webkit-box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,0,0.32);
 -moz-box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,0,0.32);
 box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,0,0.32);
+}
+.tileForm{
+  display: inline-block;
+  margin: 3%;
 }
 .pic{
   z-index: 5;
@@ -234,6 +242,17 @@ box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,
   position: absolute;
   top: 56%;
   left: 50%;
+}
+.infoBTN{
+  z-index: 3;
+position: absolute;
+top: 80%;
+left: 87%;
+background: rgba(0,0,0,0);
+border: 0;
+color: black;
+font-size: 1.2rem;
+opacity: 0.6;
 }
 .searchResult{
     position: fixed;

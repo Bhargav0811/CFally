@@ -9,7 +9,16 @@ body {
 .user-card-full {
     overflow: hidden;
 }
-
+.FrdBTN,.ExtLink{
+  background: rgba(0,0,0,0);
+  border: 0;
+  color: #E8ECEF;
+  font-size: 1.5rem;
+}
+.ExtLink{
+  color: black;
+  font-size: 1rem;
+}
 .card {
     border-radius: 5px;
     -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);

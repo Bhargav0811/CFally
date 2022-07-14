@@ -1,5 +1,11 @@
 <%- include('partials/header') %>
-
+<% if(scrollPg){ %>
+<script type="text/javascript">
+  window.onload = function(e){
+    window.location.hash = '#myTabContent';
+}
+</script>
+<% } %>
 <% if(loadLogo){ %>
 <div id="loader">
     <img class="preimg" src="logoG.gif" alt="Loading..">
@@ -85,16 +91,20 @@
   <div class="box">
       <% if(!profSearched){ %>
     <% U.friends.forEach(function(UN,index){ %>
+      <form class="tileForm" action="/Home/Search" method="post">
         <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
-          <h3 class="UN"> <%=UN%></h3>
-          <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
-          <hr class="sep">
-          <h5 class="CR"><%= U.Fr[UN][0] %></h5>
+            <input type="hidden" name="host" value="<%=U.handle%>">
+            <input type="hidden" name="searchTarget" value="<%=UN%>">
+            <input type="hidden" name="FRD" value="<%=UN%>">
+            <h3 class="UN"> <%=UN%></h3>
+            <button class="infoBTN" type="submit" onclick="submit" name="button"><i class="fa-solid fa-id-card"></i></button>
+            <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
+            <hr class="sep">
+            <h5 class="CR"><%= U.Fr[UN][0] %></h5>
         </div>
+      </form>
+
     <% })}%>
-
-
-
   </div>
   </div>
 
@@ -128,9 +138,9 @@
     </button>
   </form>
   <% if(profile.result.length>0) {%>
-  <%- include('miniprof',{user: profile.result[0]}) %>
+  <%- include('miniprof',{user: profile.result[0],isFriend:isFriend,host:U}) %>
   <% }else if(isErr){ %>
-    <div class="err mx-auto">
+    <div class="err1 mx-auto">
       <img src="er.png" class="errIMG" alt="">
     </div>
     <% } %>

@@ -108,13 +108,18 @@ var profile = {result:[]}
 var logFailed = false;
 var loggedIn = false;
 var profSearched = false;
-var warningMSG = ""
+var warningMSG = "";
+var isFriend = 0;
+var scrollPg = false;
 
 var dom;
 
 app.get("/",function(req,res){
-  loggedIn=false;
-  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed})
+  loggedIn=false;isFriend=0;
+  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed,isFriend:isFriend})
+})
+app.post("/",function(req,res){
+  res.redirect("/");
 })
 
 app.post("/search",function(req,res){
@@ -146,11 +151,18 @@ var P = {};
 var backList = [];
 
 
+function addFriend(a)
+{
+  console.log(P.handle,P.friends,a)
+  // user.updateOne({username:P.handle},{P.friends:})
+
+}
+
 app.get("/Home",function(req,res){
 
   if(loggedIn) {
     if(profSearched){loadLogo=false;}
-    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr})
+    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
     //   document =  (new JSDOM(result)).window.document;
     //   global.document = document;
   }
@@ -168,10 +180,46 @@ function toggle() {
     // $('#popup').toggleClass('active');
     console.log("Toggled Inside");
 }
+
+app.post("/Home/removeFrd",function(req,res){
+  P.friends.splice(P.friends.indexOf(req.body.F2),1);
+  user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
+    if (err)console.log(err);
+    else{
+      console.log("Updated Succesfully");
+      console.log(docs);
+    }
+  })
+  loadLogo=false;
+  scrollPg=true;
+  profSearched=false;
+  res.redirect("/Home");
+})
+
+
 app.post("/Home",function(req,res){
+  if(profSearched)
+  {
+    console.log(P.friends);
+    P.friends.push(req.body.F2);
+    P.Fr[req.body.F2] = [req.body.F2rating,req.body.F2image]
+    console.log(P.friends);
+    user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
+      if (err)console.log(err);
+      else{
+        console.log("Updated Succesfully");
+        console.log(docs);
+      }
+    })
+    isFriend=1;
+    profSearched=false;
+    res.redirect("/Home")
+
+  }
+  else
+  {
   var userN = req.body.UN;
   var pass = req.body.PS;
-  console.log(req.body);
   getJSON('https://codeforces.com/api/user.info?handles='+userN,function(err,data){
     if(err===null)
     {
@@ -193,6 +241,7 @@ app.post("/Home",function(req,res){
             {
               console.log("First Signup..");
               profile = {result:[]};
+              P={}
               loadLogo = false;
               tab = 1;
               isErr= false;
@@ -203,45 +252,45 @@ app.post("/Home",function(req,res){
             else
             {
               P.friends =  docs[0].friends
+              if(P.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")P.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
+              getStats(userN,function(){
+                P.stats = st;
+                getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
+                  P.ratingsList = Rs.result.map((a) => a.newRating)
+                  P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds)
+                  P.Profsearched = false;
+
+                  P.Fr = {}
+                  var Frs = ""
+                  backList =  Array.from({length: 8}, (_, i) => i + 1)
+                  // console.log(backList);
+                  backList =  backList.sort(() => Math.random() - 0.5)
+                  // console.log(backList);
+                  P.friends.forEach(function(I,index){
+                    Frs+=I+";"
+                  })
+                  getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
+                    data.result.forEach(function(F){
+                      if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
+                      P.Fr[F.handle] = [F.rating,F.titlePhoto]
+                    })
+                    loggedIn = true;
+                    // console.log(P)
+                    res.redirect("/Home")
+                    // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
+
+                    }).catch(error => {console.log(error)})
+                    // console.log(P.Fr);
+                    // console.log(P)
+                }).catch(error => {console.log(error)});
+                })
             }
 
             }})
 
         // P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
       }
-      if(P.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")P.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-      getStats(userN,function(){
-        P.stats = st;
-        getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
 
-          P.ratingsList = Rs.result.map((a) => a.newRating)
-          P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds)
-          P.Profsearched = false;
-
-          P.Fr = {}
-          var Frs = ""
-          backList =  Array.from({length: 8}, (_, i) => i + 1)
-          // console.log(backList);
-          backList =  backList.sort(() => Math.random() - 0.5)
-          // console.log(backList);
-          P.friends.forEach(function(I,index){
-            Frs+=I+";"
-          })
-          getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
-            data.result.forEach(function(F){
-              if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-              P.Fr[F.handle] = [F.rating,F.titlePhoto]
-            })
-            loggedIn = true;
-            // console.log(P)
-            res.redirect("/Home")
-            // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
-
-            }).catch(error => {console.log(error)})
-            // console.log(P.Fr);
-            // console.log(P)
-        }).catch(error => {console.log(error)});
-        })
       }
     else
     {
@@ -254,6 +303,7 @@ app.post("/Home",function(req,res){
       else res.redirect("/");
     }
     }).catch(error => {console.log(error)})
+  }
 })
 
 app.post("/Home/Search",function(req,res){
@@ -271,6 +321,8 @@ app.post("/Home/Search",function(req,res){
     // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
     searchProf(target,function(){
       console.log("Redirecting to Home")
+      if(P.handle===target || P.friends.includes(target))isFriend=1;
+      else isFriend=2;
       res.redirect("/Home");
     });
   }

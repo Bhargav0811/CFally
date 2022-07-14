@@ -73,7 +73,7 @@
       <label class="btn btn-outline-success tag" for="T3">By City</label> -->
     </form>
     <% if(profile.result.length>0) {%>
-    <%- include('miniprof',{user: profile.result[0]}) %>
+    <%- include('miniprof',{user: profile.result[0],isFriend:isFriend,host:profile.result[0]}) %>
     <% }else if(isErr){ %>
       <div class="err mx-auto">
         <img src="er.png" class="errIMG" alt="">

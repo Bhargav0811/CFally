@@ -6,17 +6,35 @@
 <div class="row m-l-0 m-r-0">
 <div class="col-sm-4 bg-c-lite-green user-profile">
   <div class="card-block text-center text-white">
-        <div class="m-b-25">
-            <img src="<%=user.titlePhoto%>" class="img-radius" alt="User-Profile-Image">
-        </div>
-        <h4 class="f-w-600"><%=user.handle%></h4>
-        <p><%=user.firstName+" "+user.lastName%></p>
-        <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+
+          <div class="m-b-25">
+              <img src="<%=user.titlePhoto%>" class="img-radius" alt="User-Profile-Image">
+          </div>
+          <h4 name="username" value="<%=user.handle%>" class="f-w-600"><%=user.handle%></h4>
+          <p><%=user.firstName+" "+user.lastName%></p>
+          <% if(isFriend===1) {%>
+            <form class="" action="/Home/removeFrd" method="post">
+            <input type="hidden" name="F2" value="<%=user.handle%>">
+            <input type="hidden" name="F1" value="<%=host.handle%>">
+            <button onclick="submit" type="submit" class="FrdBTN"><i class="fa-solid fa-user-minus"></i></button>
+            </form>
+            <% }else if(isFriend===2){ %>
+            <form class="" action="/Home" method="post">
+              <input type="hidden" name="F2" value="<%=user.handle%>">
+              <input type="hidden" name="F2image" value="<%=user.titlePhoto%>">
+              <input type="hidden" name="F2rating" value="<%=user.rating%>">
+              <input type="hidden" name="F1" value="<%=host.handle%>">
+              <button onclick="submit" type="submit" class="FrdBTN"><i class="fa-solid fa-user-plus"></i></button>
+          </form>
+          <% } %>
+
+
+        <!-- <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i> -->
     </div>
 </div>
 <div class="col-sm-8">
     <div class="card-block">
-        <h6 class="m-b-20 p-b-5 b-b-default f-w-600 field">Information</h6>
+        <h6 class="m-b-20 p-b-5 b-b-default f-w-600 field">Information &ensp;<a target="_blank" href="<%="https://codeforces.com/profile/"+user.handle%>"><i class="ExtLink fa-solid fa-arrow-up-right-from-square"></i></a></h6> 
         <div class="m-b-10 b-b-default row">
             <div class="col-sm-12">
                 <p class="my-10 f-w-600 field">Rating</p>
