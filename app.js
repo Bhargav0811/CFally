@@ -198,6 +198,7 @@ app.post("/Home/removeFrd",function(req,res){
 
 
 app.post("/Home",function(req,res){
+  console.log(req.body);
   if(profSearched)
   {
     console.log(P.friends);
@@ -223,6 +224,7 @@ app.post("/Home",function(req,res){
   getJSON('https://codeforces.com/api/user.info?handles='+userN,function(err,data){
     if(err===null)
     {
+      var temp = P;
       P = data.result[0];
 
       if(!('OPT' in req.body))
@@ -230,24 +232,33 @@ app.post("/Home",function(req,res){
         const U1 = new user({username:userN,password:pass,friends:["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya"]})
         P.friends =  U1.friends;
         U1.save();
+        // request({
+        // url: '/Home',
+        // method: 'POST',
+        // json:
+        // },function(error, response, body){console.log(body);});
       }
-      else
-      {
-        user.find({username:userN,password:pass},function (err, docs){
+      user.find({username:userN,password:pass},function (err, docs){
           if (err)console.log(err);
           else{
             console.log(docs);
             if(docs.length===0)
             {
-              console.log("First Signup..");
               profile = {result:[]};
-              P={}
               loadLogo = false;
               tab = 1;
               isErr= false;
               logFailed = true;
-              if(loggedIn)res.redirect("/Home");
-              else res.redirect("/");
+              if(loggedIn){
+                console.log("First Signup..");
+                P = temp;
+                res.redirect("/Home");}
+              else {P={};res.redirect("/");}
+
+
+
+
+
             }
             else
             {
@@ -256,8 +267,23 @@ app.post("/Home",function(req,res){
               getStats(userN,function(){
                 P.stats = st;
                 getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
-                  P.ratingsList = Rs.result.map((a) => a.newRating)
-                  P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds)
+                  P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds);
+                  if(P.dates.length===0)
+                  {
+                    P.ratingsList = []
+                  }
+                  else
+                  {
+                    P.ratingsList = Rs.result.map(function(value,label){
+                      const inDate = new Date(value.ratingUpdateTimeSeconds*1000).toLocaleDateString('en-GB');
+                      return {
+                        x:inDate,y:value.newRating
+                      }
+                    });
+                  }
+
+                  // console.log(P.ratingsList);
+
                   P.Profsearched = false;
 
                   P.Fr = {}
@@ -289,7 +315,6 @@ app.post("/Home",function(req,res){
             }})
 
         // P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
-      }
 
       }
     else

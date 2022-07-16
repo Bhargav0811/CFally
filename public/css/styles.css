@@ -346,6 +346,11 @@ margin: auto;
     position: relative;
     top: 41%;
   }
+  .ratingGraph{
+  width: 60%;
+text-align: center;
+margin: auto;
+}
 /* .chartIMG{
   width: 50%;
   z-index: 2;

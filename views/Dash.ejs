@@ -7,6 +7,9 @@
 </script>
 <% } %>
 <% if(loadLogo){ %>
+  <script type="text/javascript">
+    window.scrollTo({ top:0, left:0, behavior: "instant"});
+  </script>
 <div id="loader">
     <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
@@ -73,7 +76,7 @@
       <a class="nav-link <%=tab===1?'active':''%>" id="Friend-tab" data-toggle="tab" href="#Friend" role="tab" aria-controls="Friend" aria-selected="<%=tab===1?'true':'false'%>">Friends</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%=tab===2?'active':''%>" id="Stats-tab" data-toggle="tab" href="#Stats" role="tab" aria-controls="Stats" aria-selected="<%=tab===2?'true':'false'%>">Stats</a>
+        <a onclick="getGraph()" class="nav-link <%=tab===2?'active':''%>" id="Stats-tab" data-toggle="tab" href="#Stats" role="tab" aria-controls="Stats" aria-selected="<%=tab===2?'true':'false'%>">Stats</a>
       </li>
     </ul>
 </div>
@@ -110,6 +113,9 @@
 
   <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Stats" role="tabpanel" aria-labelledby="Stats-tab">
     <div class="box">
+      <div class="ratingGraph">
+        <canvas id="myChart"></canvas>
+      </div>
       <% U.stats.forEach(function(set,index){ %>
         <div style="background-image: url('../stat<%=backList[index]%>.png');" class="statBox">
           <h3 class="statField"> <%=set[0]%>  </h3>
@@ -117,16 +123,6 @@
         </div>
       <% }) %>
     </div>
-    <!-- <div class="chart">
-      <h1>Chart</h1>
-      <div id="chartIMG">
-        <img src="" alt="">
-      </div>
-
-    </div> -->
-    <!-- <h1>Stats</h1>
-    <h2></h2> -->
-
   </div>
 </div>
 </div>
@@ -147,13 +143,78 @@
 
 
 </div>
-<!-- <script type="text/javascript">
-  var data = [{x:U.dates,y:U.ratingsList,mode:"scatter"}]
-var layout = { title: 'Scroll and Zoom', showlegend: false }
-  console.log(data)
-  console.log(layout)
-</script> -->
-  <!-- Plotly.newPlot("chartIMG", data, layout, {scrollZoom: true}) -->
+
+<script>
+  var animation;
+  function getGraph()
+  {
+    const list = <%- JSON.stringify(U.ratingsList) %>;
+  const ctx = document.getElementById('myChart');
+  const down = (ctx, value) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+  const up = (ctx, value) => ctx.p0.parsed.y < ctx.p1.parsed.y ? value : undefined;
+  Chart.defaults.font.size = 14;
+  const totalDuration = 1000;
+  const delayBetweenPoints = totalDuration / list.length;
+  const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+  animation = {
+    x: {
+      type: 'number',
+      easing: 'easeInExpo',
+      duration: delayBetweenPoints,
+      from: NaN, // the point is initially skipped
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.xStarted) {
+          return 0;
+        }
+        ctx.xStarted = true;
+        return ctx.index * delayBetweenPoints;
+      }
+    },
+    y: {
+      type: 'number',
+      easing: 'easeInExpo',
+      duration: delayBetweenPoints,
+      from: previousY,
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.yStarted) {
+          return 0;
+        }
+        ctx.yStarted = true;
+        return ctx.index * delayBetweenPoints;
+      }
+    }
+  };
 
 
+  const myChart = new Chart(ctx, {
+    type: 'line',
+  data: {
+    datasets: [{
+      data: list,
+      borderWidth: 3,
+      segment: {
+          borderColor: ctx => up(ctx,"#14E114") || down(ctx,"#F04854")
+        }
+    }]
+  },
+  options: {
+    animation,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: 'Contest Performance'
+      }
+    },
+      scales: {
+            y: {grid: {display: false,borderWidth: 3,borderColor: "#21B6A8"},beginAtZero: true},
+            x: {grid: {display: true,borderWidth: 3,borderColor: "#21B6A8"}}
+            }
+    }
+  })
+  }
+</script>
 <%- include('partials/footer') %>
