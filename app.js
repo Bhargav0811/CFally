@@ -254,11 +254,6 @@ app.post("/Home",function(req,res){
                 P = temp;
                 res.redirect("/Home");}
               else {P={};res.redirect("/");}
-
-
-
-
-
             }
             else
             {
@@ -331,6 +326,24 @@ app.post("/Home",function(req,res){
   }
 })
 
+app.post("/Home/sort/:option",function(req,res){
+  console.log(P.friends)
+  if(req.params.option==="1")
+  {
+    P.friends =  P.friends.sort((a, b) => {
+      return a.localeCompare(b, undefined, {sensitivity: 'base'});
+    });
+  }
+  else
+  {
+    P.friends = P.friends.sort(function compareRating(a,b){return P.Fr[b][0]-P.Fr[a][0];});
+  }
+  console.log(P.friends)
+  scrollPg=true;
+  loadLogo=false;
+  res.redirect("/Home");
+})
+
 app.post("/Home/Search",function(req,res){
   if(profSearched===true)
   {
@@ -401,7 +414,7 @@ function getStats(ID,callback)
         // console.log(htmldata.substr(result.index,100));
     }
     var stats = []
-    var field = ["All Time","Last Year","Last Month","In Row(Max)","In Row(Month)","In Row(Year)"]
+    var field = ["All Time","Last Year","Last Month","Row(Max)","Row(Month)","Row(Year)"]
     var s = ""
     indices.forEach(function(i,index){
       if(index<3)s = " problems</div>";

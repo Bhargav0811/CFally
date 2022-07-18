@@ -277,6 +277,14 @@ opacity: 0.6;
 } */
 .searchResult .padding{ padding: 0 !important;}
 
+.sortOption{
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  column-gap: 10%;
+  align-items: center;
+}
+
 
 .closeSearchedProf{
   z-index: 2;
@@ -319,32 +327,36 @@ margin: auto;
 	width: 100%;
     border-radius: 3%;
 	}
-
-  .statBox{
-    display: inline-block;
-    text-align: justify;
-
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 19%;
-    height: 41vh;
-    text-align: center;
-    margin: 0 1%;
-    /* background-color: cyan; */
-  }
   .statField{
-    font-size: 175%;
     font-weight: bolder;
     color: white;
     position: relative;
-    top: 26%;
+  margin-top: 2.5vw;
+  font-size: 1.6vw;
   }
   .statValue{
-    font-size: 3.3rem;
     font-weight: bolder;
-    color: black;
-    position: relative;
-    top: 41%;
+  color: black;
+  position: relative;
+  margin-top: 16%;
+font-size: 2.5vw;
+
+  }
+  .statBox{
+    display: inline-block;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 15%;
+    height: 100%;
+    background-position: center;
+  }
+  .statContainer{
+    display: flex;
+    height: 12vw;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 3% auto;
   }
   .ratingGraph{
   width: 60%;
@@ -491,107 +503,174 @@ width: 39%;
 }
 }
 
-@media (max-width: 400px) and (min-width:0px) {
+@media (max-width: 400px) and (min-width:0px){
   .padding{
-    padding: 2rem 0 !important;
-  }
-  .LogoF{
-    width: auto;
-margin: 0 0 1% 1%;
-height: 4vh;
-  }
-  .padding{
-    padding: 0;
-  }
-  .padding .row{
-    --bs-gutter-x: 1rem;
-  }
-  .padding p{
-    margin-bottom: 0.5rem;
-  }
-  .field{
-    font-size: 0.8rem;
-  }
-  .text-muted{
-    font-size: 0.8rem;
-  }
-  .login{
+      padding: 2rem 0;
+    }
+    .LogoF{
+      width: auto;
+  margin: 0 0 1% 1%;
+  height: 4vh;
+    }
+    .padding{
+      padding: 0;
+    }
+    .padding .row{
+      --bs-gutter-x: 1rem;
+    }
+    .padding p{
+      margin-bottom: 0.5rem;
+    }
+    .field{
+      font-size: 0.8rem;
+    }
+    .text-muted{
+      font-size: 0.8rem;
+    }
+    .login{
+      display: flex;
+      column-gap: 0.5rem;
+    }
+    .loginF{
+      width: 95% !important;
+      height: 100%;
+      padding: .375rem .2rem;
+      font-size: 0.7rem;
+    }
+    .login .toggle{
+      width: 40% !important;
+      height: 3vh;
+      min-width: 3.9rem;
+      min-height: 1.5rem;
+    }
+    .login .btn-outline-success{
+      font-size: 0.7rem;
+    }
+    .toggle .toggle-group label{
+      font-size: 0.7rem;
+    }
+    .nav-item{
+      font-size: 0.8rem;
+    }
+    .nav-link{
+      padding: .5rem 0rem;
+    }
+    .nav1{
+      text-align: center;
+    margin-bottom: 1rem;
+    width: 100%;
+    }
+    .login .form-check {
+    padding-left: 1em;
+    padding-right: 1em;
     display: flex;
-    column-gap: 0.5rem;
-  }
-  .loginF{
-    width: 60%;
-    height: 100%;
-    padding: .375rem .2rem;
     font-size: 0.7rem;
+    flex-wrap: wrap;
+    width: 50% !important;
+    align-items: center;
   }
-  .login .toggle{
-    width: 40% !important;
-    height: 3vh;
-    min-width: 3.9rem;
-    min-height: 1.5rem;
+    .Searchbox .fas{
+      font-size: 0.7rem;
+    }
+    .Searchbox{
+      display: flex;
+  margin: 10% auto;
+  transform: translateX(-18%);
+    }
+    .searchResult{
+      width: 80% !important;
+    }
+    .sbox {
+      height: 2rem;
+  width: 8rem;
+  font-size: 1rem;
   }
-  .login .btn-outline-success{
-    font-size: 0.7rem;
+  .errIMG{
+    width: 135%;
   }
-  .toggle .toggle-group label{
-    font-size: 0.7rem;
+  .user-profile {
+      padding: 0 !important;
   }
-  .nav-item{
-    font-size: 0.8rem;
-  }
-  .nav-link{
-    padding: .5rem 0rem;
-  }
-  .nav1{
-    text-align: center;
-  margin-bottom: 1rem;
-  width: 100%;
-  }
-  .login .form-check {
-  padding-left: 1em;
-  padding-right: 1em;
-  display: flex;
+  .tag {
+    width: 90%;
   font-size: 0.7rem;
-  flex-wrap: wrap;
-  width: 140%;
-  align-items: center;
-}
-  .Searchbox .fas{
-    font-size: 0.7rem;
   }
-  .Searchbox{
-    display: flex;
-margin: 10% auto;
-transform: translateX(-18%);
+  .card-block .img-radius {
+    height: 60%;
+  width: 60%;
+  max-height: 40vh;
+  max-width: 40vh;
   }
-  .sbox {
-    height: 2rem;
-width: 8rem;
-font-size: 1rem;
+  .tags {
+    width: 100%;
+  }
+  .cal-content{
+    width: 100%;
+margin: 0 auto;
+height: 50vh;
 }
-.errIMG{
-  width: 135%;
+.logOut{
+  position: absolute;
+top: 4%;
+right: 4%;
 }
-.user-profile {
-    padding: 0 !important;
+.avatar {
+  height: 40% !important;
+  width: 40% !important;
 }
-.tag {
-  width: 90%;
-font-size: 0.7rem;
+.userInfo{
+  font-size: 1em !important;
 }
-.card-block .img-radius {
-  height: 60%;
-width: 60%;
-max-height: 40vh;
-max-width: 40vh;
+.userInfo h5,h2{
+  font-size: 1rem !important;
 }
-.tags {
-  width: 100%;
+.userInfo h1{
+  font-size: 1rem !important;
 }
-.cal-content{
-  height: 80%;
-  width: 72%;
-  margin: 0 auto;
+.options{
+  position: absolute;
+top: 22%;
+display: block ruby;
+left: 50%;
+}
+.proico {
+  font-size: 1rem;
+}
+.prof{
+  height: 65vh !important;
+}
+.sortBTN{
+  font-size: 0.6rem;
+}
+.tile{
+  height: 15vh !important;
+width: 20vh !important;
+}
+.UN{
+  font-size: 4vw !important;
+}
+.CR{
+  top: 70% !important;
+  font-size: 0.9rem !important;
+}
+.infoBTN{
+  top: 78% !important;
+left: 82% !important;
+font-size: 1rem !important;
+}
+.ratingGraph{
+  width: 100% !important;
+}
+.statBox{
+  width: 30% !important;
+height: auto !important;
+margin: 3% auto !important;
+}
+.statField{
+  margin-top: 4vw !important;
+font-size: 3vw !important;
+}
+.statValue{
+  font-size: 6vw !important;
 }
 }

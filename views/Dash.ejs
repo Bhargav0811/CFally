@@ -1,4 +1,5 @@
 <%- include('partials/header') %>
+
 <% if(scrollPg){ %>
 <script type="text/javascript">
   window.onload = function(e){
@@ -28,12 +29,14 @@
             <label class="form-check-label" >Change User</label>
           </div>
           <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
-          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'CF ID'%>" autocomplete="on">
-          <input type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password">
+<div class="">
+  <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'CF ID'%>" autocomplete="on">
+  <input type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password">
+</div>
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
         </div>
       </form>
-      <form class="" action="/" method="get">
+      <form class="logOut" class="" action="/" method="get">
         <button onclick="submit" class="LogoutBTN" type="submit"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
       </form>
     </div>
@@ -51,7 +54,7 @@
         <img class="avatar" src="<%=U.titlePhoto%>" alt="">
       </div>
     </div>
-    <div class="col-sm">
+    <div class="userInfo col-sm">
     <h1><%=U.hasOwnProperty("firstName")?U.firstName:''%>&ensp;<%=U.hasOwnProperty("lastName")?U.lastName:''%></h1>
     <h3><%=U.handle%></h3>
     <h5>Rank : <%=U.rank%> ( Max : <%=U.maxRank%> )</h5>
@@ -93,6 +96,11 @@
     </form>
   <div class="box">
       <% if(!profSearched){ %>
+        <div class="sortOption">
+
+          <form class="" action="/Home/sort/1" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-a-z"></i>&ensp;Alphabetical Order</span></button></form>
+          <form class="" action="/Home/sort/2" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-wide-short"></i>&ensp;High to low rating</span></button></form>
+        </div>
     <% U.friends.forEach(function(UN,index){ %>
       <form class="tileForm" action="/Home/Search" method="post">
         <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
@@ -116,12 +124,15 @@
       <div class="ratingGraph">
         <canvas id="myChart"></canvas>
       </div>
-      <% U.stats.forEach(function(set,index){ %>
-        <div style="background-image: url('../stat<%=backList[index]%>.png');" class="statBox">
-          <h3 class="statField"> <%=set[0]%>  </h3>
-          <h5 class="statValue"><%=set[1]%></h5>
-        </div>
-      <% }) %>
+      <div class="statContainer">
+        <% U.stats.forEach(function(set,index){ %>
+          <div style="background-image: url('../stat<%=backList[index]%>.png');" class="statBox">
+            <h3 class="statField"> <%=set[0]%>  </h3>
+            <h5 class="statValue"><%=set[1]%></h5>
+          </div>
+        <% }) %>
+      </div>
+
     </div>
   </div>
 </div>
