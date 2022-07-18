@@ -504,6 +504,10 @@ width: 39%;
 }
 
 @media (max-width: 400px) and (min-width:0px){
+  .preimg{
+    height: 27% !important;
+width: 67% !important;
+  }
   .padding{
       padding: 2rem 0;
     }
@@ -560,15 +564,24 @@ width: 39%;
     margin-bottom: 1rem;
     width: 100%;
     }
-    .login .form-check {
+    .login .typeHome {
     padding-left: 1em;
     padding-right: 1em;
     display: flex;
     font-size: 0.7rem;
     flex-wrap: wrap;
-    width: 50% !important;
+    width: 120% !important;
     align-items: center;
   }
+  .login .typeDash {
+  padding-left: 1em;
+  padding-right: 1em;
+  display: flex;
+  font-size: 0.7rem;
+  flex-wrap: wrap;
+  width: 232% !important;
+  align-items: center;
+}
     .Searchbox .fas{
       font-size: 0.7rem;
     }
@@ -604,6 +617,9 @@ width: 39%;
   .tags {
     width: 100%;
   }
+  .cal{
+    width: 90% !important;
+  }
   .cal-content{
     width: 100%;
 margin: 0 auto;
@@ -628,10 +644,12 @@ right: 4%;
   font-size: 1rem !important;
 }
 .options{
-  position: absolute;
-top: 22%;
-display: block ruby;
-left: 50%;
+  position: absolute !important;
+top: 20% !important;
+display: block ruby !important;
+left: 50% !important;
+width: fit-content !important;
+height: fit-content !important;
 }
 .proico {
   font-size: 1rem;
