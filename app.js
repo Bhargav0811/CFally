@@ -229,7 +229,7 @@ app.post("/Home",function(req,res){
 
       if(!('OPT' in req.body))
       {
-        const U1 = new user({username:userN,password:pass,friends:["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya"]})
+        const U1 = new user({username:userN,password:pass,friends:[]})
         P.friends =  U1.friends;
         U1.save();
         // request({

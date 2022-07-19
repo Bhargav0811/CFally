@@ -92,6 +92,10 @@ margin: revert-layer;
   background-color: #fad02c;
   border-color: #EEEDE7;
 }
+#togglePassword{
+  margin-left: -6%;
+  cursor: pointer;
+}
 .tabs{
   margin: 1% auto;
 padding-left: 14%;
@@ -534,9 +538,11 @@ width: 67% !important;
     .login{
       display: flex;
       column-gap: 0.5rem;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
     .loginF{
-      width: 95% !important;
+      width: 123% !important;
       height: 100%;
       padding: .375rem .2rem;
       font-size: 0.7rem;
@@ -581,6 +587,11 @@ width: 67% !important;
   flex-wrap: wrap;
   width: 232% !important;
   align-items: center;
+}
+#togglePassword{
+  margin-left: -8%;
+  cursor: pointer;
+  font-size: 0.7rem;
 }
     .Searchbox .fas{
       font-size: 0.7rem;
