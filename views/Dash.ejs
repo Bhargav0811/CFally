@@ -12,13 +12,13 @@
     window.scrollTo({ top:0, left:0, behavior: "instant"});
   </script>
 <div id="loader">
-    <img class="preimg" src="logoG.gif" alt="Loading..">
+    <img class="preimg" src="./public/logoG.gif" alt="Loading..">
 </div>
 <% } %>
 <nav class="navbar navbar-dark bg-dark justify-content-between">
   <div class="row">
     <div class="col-sm nav1">
-      <img class="LogoF" src="logoFN.png" alt="Logo">
+      <img class="LogoF" src="./public/logoFN.png" alt="Logo">
     </div>
     <div class="col-lg nav2">
       <form class="form-inline" method="post" action="/Home">
@@ -147,7 +147,7 @@
   <%- include('miniprof',{user: profile.result[0],isFriend:isFriend,host:U}) %>
   <% }else if(isErr){ %>
     <div class="err1 mx-auto">
-      <img src="er.png" class="errIMG" alt="">
+      <img src="./public/er.png" class="errIMG" alt="">
     </div>
     <% } %>
 

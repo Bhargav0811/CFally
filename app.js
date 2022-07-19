@@ -90,7 +90,7 @@ app.use(session({
 // with urllib.request.urlopen(user_URL) as url:
 // 		user_data = json.loads(url.read().decode())
 
-mongoose.connect("mongodb://localhost:27017/CFally",{useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-bhargav:admin123@cluster1.yhr2kqj.mongodb.net/CFally",{useNewUrlParser: true});
 const usersch = new mongoose.Schema({
   username: String,
   password: String,
@@ -150,14 +150,6 @@ var Backs = [
 var P = {};
 var backList = [];
 
-
-function addFriend(a)
-{
-  console.log(P.handle,P.friends,a)
-  // user.updateOne({username:P.handle},{P.friends:})
-
-}
-
 app.get("/Home",function(req,res){
 
   if(loggedIn) {
@@ -178,7 +170,7 @@ function toggle() {
     var popup = global.document.getElementById('popup');
     popup.classList.toggle('active');
     // $('#popup').toggleClass('active');
-    console.log("Toggled Inside");
+    // console.log("Toggled Inside");
 }
 
 app.post("/Home/removeFrd",function(req,res){
@@ -186,8 +178,8 @@ app.post("/Home/removeFrd",function(req,res){
   user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
     if (err)console.log(err);
     else{
-      console.log("Updated Succesfully");
-      console.log(docs);
+      // console.log("Updated Succesfully");
+      // console.log(docs);
     }
   })
   loadLogo=false;
@@ -198,18 +190,18 @@ app.post("/Home/removeFrd",function(req,res){
 
 
 app.post("/Home",function(req,res){
-  console.log(req.body);
+  // console.log(req.body);
   if(profSearched)
   {
-    console.log(P.friends);
+    // console.log(P.friends);
     P.friends.push(req.body.F2);
     P.Fr[req.body.F2] = [req.body.F2rating,req.body.F2image]
-    console.log(P.friends);
+    // console.log(P.friends);
     user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
       if (err)console.log(err);
       else{
-        console.log("Updated Succesfully");
-        console.log(docs);
+        // console.log("Updated Succesfully");
+        // console.log(docs);
       }
     })
     isFriend=1;
@@ -241,7 +233,7 @@ app.post("/Home",function(req,res){
       user.find({username:userN,password:pass},function (err, docs){
           if (err)console.log(err);
           else{
-            console.log(docs);
+            // console.log(docs);
             if(docs.length===0)
             {
               profile = {result:[]};
@@ -250,7 +242,7 @@ app.post("/Home",function(req,res){
               isErr= false;
               logFailed = true;
               if(loggedIn){
-                console.log("First Signup..");
+                // console.log("First Signup..");
                 P = temp;
                 res.redirect("/Home");}
               else {P={};res.redirect("/");}
@@ -290,17 +282,24 @@ app.post("/Home",function(req,res){
                   P.friends.forEach(function(I,index){
                     Frs+=I+";"
                   })
-                  getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
-                    data.result.forEach(function(F){
-                      if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-                      P.Fr[F.handle] = [F.rating,F.titlePhoto]
-                    })
-                    loggedIn = true;
-                    // console.log(P)
-                    res.redirect("/Home")
-                    // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
+                  // console.log(P,Frs);
+                  if(Frs===""){loggedIn = true;res.redirect("/Home");}
+                  else
+                  {
+                    getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
 
-                    }).catch(error => {console.log(error)})
+                      data.result.forEach(function(F){
+                        if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
+                        P.Fr[F.handle] = [F.rating,F.titlePhoto]
+                      })
+                      loggedIn = true;
+                      // console.log(P)
+                      res.redirect("/Home")
+                      // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
+
+                      }).catch(error => {console.log(error)})
+                  }
+
                     // console.log(P.Fr);
                     // console.log(P)
                 }).catch(error => {console.log(error)});
@@ -327,7 +326,7 @@ app.post("/Home",function(req,res){
 })
 
 app.post("/Home/sort/:option",function(req,res){
-  console.log(P.friends)
+  // console.log(P.friends)
   if(req.params.option==="1")
   {
     P.friends =  P.friends.sort((a, b) => {
@@ -338,7 +337,7 @@ app.post("/Home/sort/:option",function(req,res){
   {
     P.friends = P.friends.sort(function compareRating(a,b){return P.Fr[b][0]-P.Fr[a][0];});
   }
-  console.log(P.friends)
+  // console.log(P.friends)
   scrollPg=true;
   loadLogo=false;
   res.redirect("/Home");
@@ -358,7 +357,7 @@ app.post("/Home/Search",function(req,res){
     // var type = req.body['options-outlined']
     // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
     searchProf(target,function(){
-      console.log("Redirecting to Home")
+      // console.log("Redirecting to Home")
       if(P.handle===target || P.friends.includes(target))isFriend=1;
       else isFriend=2;
       res.redirect("/Home");
@@ -371,7 +370,7 @@ function searchProf(target,callback)
   getJSON('https://codeforces.com/api/user.info?handles='+target,function(err,data){
     if(err===null)
     {
-      console.log("Hello-Got");
+      // console.log("Hello-Got");
       profile = {result:data.result};
       loadLogo = false;
       tab = 2;
@@ -380,7 +379,7 @@ function searchProf(target,callback)
     }
     else
     {
-      console.log("Hello-Failed");
+      // console.log("Hello-Failed");
       profile = {result:[]};
       loadLogo = false;
       tab = 2;
@@ -431,8 +430,8 @@ function getStats(ID,callback)
 }
 
 
-app.listen(3000,function(){
-  console.log("Server started on port 3000..");
+app.listen(process.env.PORT || 3000,function(){
+  console.log("Server started");
 });
 
 // var data = [{
