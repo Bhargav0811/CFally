@@ -7,7 +7,12 @@ body {
     padding-top: 200px;
     text-align: center;
 }
-
+#fixed {
+    position: fixed;
+}
+#fixed.absolute {
+    position: absolute;
+}
 #loader{
   position: fixed;
   width: 100%;
@@ -143,7 +148,7 @@ text-align: center;
   padding-top: 2%;
 }
 .errIMG{
-  width: 60%;
+  width: 100%;
 }
 
 .prof{
@@ -177,10 +182,6 @@ object-position: center;
 height: 40vh;
 width: 40vh;
 object-fit: fill;
-  /* box-shadow: 0px 0px 9px 4px #2BFF88; */
-  -webkit-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
--moz-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
-box-shadow: inset 10px 9px 31px 1px rgba(0,0,0,0.32);
 }
 .C1{
   height: auto;
@@ -210,6 +211,7 @@ box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,
   display: inline-block;
   margin: 3%;
 }
+
 .pic{
   z-index: 5;
   height: 56%;
@@ -302,35 +304,11 @@ border: 0;
 color: #383940;
 }
 
-.chart{
+/* .chart{
   text-align: center;
 width: 80%;
 margin: auto;
-}
-.chartIMG {
-	position: relative;
-	max-width: 100%;
-  width: 50%;
-  margin: 0 auto 10%;
-	}
-
-    .chartIMG::before {
-      content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  box-shadow: inset 1px 1px 15px 1px rgba(0,0,0,0.3);
-  -moz-box-shadow: inset 1px 1px 15px 1px rgba(0,0,0,0.3);
-  -webkit-box-shadow: inset 1px 1px 15px 1px rgba(0,0,0,0.3);
-  border-radius: 3%;
-	   }
-
-.chartIMG img {
-	width: 100%;
-    border-radius: 3%;
-	}
+} */
   .statField{
     font-weight: bolder;
     color: white;
@@ -362,11 +340,7 @@ font-size: 2.5vw;
     justify-content: center;
     margin: 3% auto;
   }
-  .ratingGraph{
-  width: 60%;
-text-align: center;
-margin: auto;
-}
+
 /* .chartIMG{
   width: 50%;
   z-index: 2;
@@ -375,7 +349,7 @@ margin: auto;
 box-shadow: 5px 10px 15px 1px rgba(0,0,0,0.2), inset 10px 9px 31px 1px rgba(0,0,0,0.32);
 } */
 
-@media (max-width: 1600px) and (min-width :990px)
+@media (max-width: 5120px) and (min-width :990px)
 {
 .LogoF{
   width: 15%;
@@ -408,7 +382,35 @@ margin: 0 auto;
   height: 39%;
   width: 27%;
 }
-
+h1{
+  font-size: 2.5rem;
+  font-weight: 600;
+  font-family: ubuntu;
+  font-family: 'Ubuntu', sans-serif;
+}
+h2
+{
+  font-size: 2rem;
+  font-weight: bold;
+  font-weight: 600;
+}
+.myChartClass{
+  width:100%;
+  height: auto;
+}
+.ratingGraph{
+width: 60%;
+text-align: center;
+margin: auto;
+}
+.noFRD{
+  width: 50%;
+margin: auto;
+opacity: 0.6;
+}
+.noFRDimg{
+  width: 100%;
+}
 }
 
 @media (max-width: 989px) and (min-width:769px) {
@@ -454,6 +456,14 @@ height: 70vh;
 .preimg{
   height: 33%;
   width: 34%;
+}
+.noFRD{
+  width: 50%;
+margin: auto;
+opacity: 0.6;
+}
+.noFRDimg{
+  width: 100%;
 }
 }
 
@@ -504,6 +514,14 @@ margin: 0 auto;
 .preimg{
   height: 23%;
 width: 39%;
+}
+.noFRD{
+  width: 50%;
+margin: auto;
+opacity: 0.6;
+}
+.noFRDimg{
+  width: 100%;
 }
 }
 
@@ -609,9 +627,10 @@ width: 67% !important;
   width: 8rem;
   font-size: 1rem;
   }
-  .errIMG{
-    width: 135%;
+  .box{
+    min-height: 100vh;
   }
+
   .user-profile {
       padding: 0 !important;
   }
@@ -641,54 +660,72 @@ height: 50vh;
 top: 4%;
 right: 4%;
 }
+.C1{
+  text-align: center;
+}
 .avatar {
-  height: 40% !important;
-  width: 40% !important;
+  height: 60% !important;
+width: 60% !important;
 }
 .userInfo{
-  font-size: 1em !important;
+  font-size: 1.2em !important;
+text-align: center;
 }
-.userInfo h5,h2{
-  font-size: 1rem !important;
+.userInfo *{
+}
+.userInfo h2{
+  font-size: larger;
+text-align: center;
+font-family: 'Ubuntu', sans-serif;
+}
+.userInfo h5{
+  font-size: 1.2rem;
 }
 .userInfo h1{
-  font-size: 1rem !important;
+  font-size: 2rem !important;
+font-family: 'Ubuntu', sans-serif;
 }
+.Rating_Link h2{
+  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  font-size: 2em;
+}
+
 .options{
-  position: absolute !important;
-top: 20% !important;
-display: block ruby !important;
-left: 50% !important;
-width: fit-content !important;
-height: fit-content !important;
+  text-align: center;
+  display: block ruby;
+}
+.options a *{
+  font-size: 1.5em;
 }
 .proico {
   font-size: 1rem;
 }
 .prof{
   height: 65vh !important;
+  min-height: 88vh;
 }
 .sortBTN{
   font-size: 0.6rem;
 }
 .tile{
   height: 15vh !important;
-width: 20vh !important;
+width: 50vw !important;
 }
 .UN{
   font-size: 4vw !important;
+  font-family: 'Roboto', sans-serif;
 }
 .CR{
-  top: 70% !important;
-  font-size: 0.9rem !important;
+  top: 62% !important;
+font-size: 0.9rem !important;
+font-family: 'Roboto', sans-serif;
 }
 .infoBTN{
   top: 78% !important;
-left: 82% !important;
-font-size: 1rem !important;
-}
-.ratingGraph{
-  width: 100% !important;
+left: 85% !important;
+font-size: 0.8rem !important;
+opacity: 0.4;
 }
 .statBox{
   width: 30% !important;
@@ -701,5 +738,44 @@ font-size: 3vw !important;
 }
 .statValue{
   font-size: 6vw !important;
+}
+.myChartClass{
+  width:100% !important;
+  height: auto !important;
+}
+.ratingGraph{
+width:100%;
+text-align: center;
+margin: auto;
+}
+.noFRD{
+  width: 100%;
+margin: auto;
+opacity: 0.6;
+}
+.noFRDimg{
+  width: 100%;
+}
+.err1 {
+  width: 75%;
+  text-align: center;
+  padding-top: 2%;
+}
+.sep {
+  z-index: 4;
+  position: absolute;
+  top: 36%;
+  transform: translateY(-50%);
+  height: 4% !important;
+  width: 100%;
+  background-color: #E8ECEF;
+  opacity: 1;
+}
+.card-block {
+  padding: 1rem;
+}
+.field {
+  font-size: 1.1rem;
+  margin-bottom: 0;
 }
 }

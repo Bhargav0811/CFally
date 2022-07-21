@@ -115,7 +115,7 @@ var scrollPg = false;
 var dom;
 
 app.get("/",function(req,res){
-  loggedIn=false;isFriend=0;
+  if(loggedIn){loadLogo=true;loggedIn=false;logFailed=false;isFriend=0;}
   res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed,isFriend:isFriend})
 })
 app.post("/",function(req,res){
@@ -188,7 +188,6 @@ app.post("/Home/removeFrd",function(req,res){
   res.redirect("/Home");
 })
 
-
 app.post("/Home",function(req,res){
   // console.log(req.body);
   if(profSearched)
@@ -211,6 +210,7 @@ app.post("/Home",function(req,res){
   }
   else
   {
+    var Signup = false;
   var userN = req.body.UN;
   var pass = req.body.PS;
   getJSON('https://codeforces.com/api/user.info?handles='+userN,function(err,data){
@@ -219,94 +219,52 @@ app.post("/Home",function(req,res){
       var temp = P;
       P = data.result[0];
 
+      // console.log("Data Fetched")
       if(!('OPT' in req.body))
       {
         const U1 = new user({username:userN,password:pass,friends:[]})
-        P.friends =  U1.friends;
         U1.save();
+        saveUserData(userN,[],function(){
+          loggedIn = true;
+          res.redirect("/Home");
+        });
         // request({
         // url: '/Home',
         // method: 'POST',
         // json:
         // },function(error, response, body){console.log(body);});
       }
-      user.find({username:userN,password:pass},function (err, docs){
-          if (err)console.log(err);
-          else{
-            // console.log(docs);
-            if(docs.length===0)
-            {
-              profile = {result:[]};
-              loadLogo = false;
-              tab = 1;
-              isErr= false;
-              logFailed = true;
-              if(loggedIn){
-                // console.log("First Signup..");
-                P = temp;
-                res.redirect("/Home");}
-              else {P={};res.redirect("/");}
-            }
-            else
-            {
-              P.friends =  docs[0].friends
-              if(P.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")P.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-              getStats(userN,function(){
-                P.stats = st;
-                getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
-                  P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds);
-                  if(P.dates.length===0)
-                  {
-                    P.ratingsList = []
-                  }
-                  else
-                  {
-                    P.ratingsList = Rs.result.map(function(value,label){
-                      const inDate = new Date(value.ratingUpdateTimeSeconds*1000).toLocaleDateString('en-GB');
-                      return {
-                        x:inDate,y:value.newRating
-                      }
-                    });
-                  }
+      else
+      {
+        user.find({username:userN,password:pass},function (err, docs){
+            if (err)console.log(err);
+            else{
+              // console.log(docs);
+              if(docs.length===0)
+              {
+                profile = {result:[]};
+                loadLogo = false;
+                tab = 1;
+                isErr= false;
+                logFailed = true;
+                if(loggedIn){
+                  P = temp;
+                  res.redirect("/Home");}
+                else {P={};res.redirect("/");}
+              }
+              else
+              {
+                P.friends =  docs[0].friends
+                saveUserData(userN,docs[0].friends,function(){
+                  loggedIn = true;
+                  res.redirect("/Home");
+                });
 
-                  // console.log(P.ratingsList);
+              }
 
-                  P.Profsearched = false;
+              }})
 
-                  P.Fr = {}
-                  var Frs = ""
-                  backList =  Array.from({length: 8}, (_, i) => i + 1)
-                  // console.log(backList);
-                  backList =  backList.sort(() => Math.random() - 0.5)
-                  // console.log(backList);
-                  P.friends.forEach(function(I,index){
-                    Frs+=I+";"
-                  })
-                  // console.log(P,Frs);
-                  if(Frs===""){loggedIn = true;res.redirect("/Home");}
-                  else
-                  {
-                    getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
-
-                      data.result.forEach(function(F){
-                        if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
-                        P.Fr[F.handle] = [F.rating,F.titlePhoto]
-                      })
-                      loggedIn = true;
-                      // console.log(P)
-                      res.redirect("/Home")
-                      // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
-
-                      }).catch(error => {console.log(error)})
-                  }
-
-                    // console.log(P.Fr);
-                    // console.log(P)
-                }).catch(error => {console.log(error)});
-                })
-            }
-
-            }})
+      }
 
         // P.friends = ["vasubeladiya","yash54","Brij_sojitra","jenil_kukadiya","Devansh11","jensibodrya","Jainam_Jain","dhruvin401"]
 
@@ -324,6 +282,63 @@ app.post("/Home",function(req,res){
     }).catch(error => {console.log(error)})
   }
 })
+
+function saveUserData(userN,arr,callback){
+  getStats(userN,function(){
+    P.stats = st;
+    getJSON('https://codeforces.com/api/user.rating?handle='+userN,function(err,Rs){
+      P.dates = Rs.result.map((a) => a.ratingUpdateTimeSeconds);
+      if(P.dates.length===0)
+      {
+        P.ratingsList = []
+      }
+      else
+      {
+        P.ratingsList = Rs.result.map(function(value,label){
+          const inDate = new Date(value.ratingUpdateTimeSeconds*1000).toLocaleDateString('en-GB');
+          return {
+            x:inDate,y:value.newRating
+          }
+        });
+      }
+
+      // console.log(P.ratingsList);
+
+      P.Profsearched = false;
+      // console.log(P.stats,P.ratingsList,P.dates);
+      P.Fr = {};
+      var Frs = "";
+      backList =  Array.from({length: 8}, (_, i) => i + 1);
+      // console.log(backList);
+      backList =  backList.sort(() => Math.random() - 0.5);
+      // console.log(backList);
+      P.friends = arr;
+      if(P.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")P.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
+
+      // console.log(P.friends,P.titlePhoto,Frs);
+      P.friends.forEach(function(I,index){
+        Frs+=I+";";
+      });
+      console.log(Frs);
+      if(Frs===""){if (typeof callback == "function"){callback();}}
+      else
+      {
+        getJSON('https://codeforces.com/api/user.info?handles='+Frs,function(err,data){
+          data.result.forEach(function(F){
+            if(F.titlePhoto==="https://cdn-userpic.codeforces.com/no-title.jpg")F.titlePhoto="A"+ (Math.floor(Math.random() * 3)+1) +".png";
+            P.Fr[F.handle] = [F.rating,F.titlePhoto]
+          })
+          if (typeof callback == "function"){callback();}
+          // res.render("Dash",{U:P,tab:1,loadLogo:true,logFailed:false,back:Backs,backList:backList.slice(0,6)})
+
+          }).catch(error => {console.log(error)})
+      }
+        // console.log(P.Fr);
+        // console.log(P)
+    }).catch(error => {console.log(error)});
+    })
+
+}
 
 app.post("/Home/sort/:option",function(req,res){
   // console.log(P.friends)
@@ -358,7 +373,8 @@ app.post("/Home/Search",function(req,res){
     // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
     searchProf(target,function(){
       // console.log("Redirecting to Home")
-      if(P.handle===target || P.friends.includes(target))isFriend=1;
+      if(P.handle===target)isFriend=0;
+      else if(P.friends.includes(target))isFriend=1;
       else isFriend=2;
       res.redirect("/Home");
     });

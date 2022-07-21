@@ -12,13 +12,13 @@
     window.scrollTo({ top:0, left:0, behavior: "instant"});
   </script>
 <div id="loader">
-    <img class="preimg" src="./public/logoG.gif" alt="Loading..">
+    <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
 <% } %>
 <nav class="navbar navbar-dark bg-dark justify-content-between">
   <div class="row">
     <div class="col-sm nav1">
-      <img class="LogoF" src="./public/logoFN.png" alt="Logo">
+      <img class="LogoF" src="logoFN.png" alt="Logo">
     </div>
     <div class="col-lg nav2">
       <form class="form-inline" method="post" action="/Home">
@@ -35,6 +35,7 @@
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
         </div>
       </form>
+
       <form class="logOut" class="" action="/" method="get">
         <button onclick="submit" class="LogoutBTN" type="submit"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
       </form>
@@ -56,13 +57,14 @@
     <div class="userInfo col-sm">
     <h1><%=U.hasOwnProperty("firstName")?U.firstName:''%>&ensp;<%=U.hasOwnProperty("lastName")?U.lastName:''%></h1>
     <h3><%=U.handle%></h3>
-    <h5>Rank : <%=U.rank%> ( Max : <%=U.maxRank%> )</h5>
-    <p><%=U.hasOwnProperty("organization")?"Organisation : "+U.organization:''%></p>
-    <p><%=U.hasOwnProperty("organization")?"City : "+U.city:''%></p>
+    <h5><b>Rank : </b><%=U.rank%> ( Max : <%=U.maxRank%> )</h5>
+    <p><b>Organisation : </b><%=U.hasOwnProperty("organization")?U.organization:'-'%></p>
+    <p><b>City : </b><%=U.hasOwnProperty("organization")?U.city:'-'%></p>
 
     </div>
-    <div class="col-sm">
-      <h2>Rating : <%=U.rating%> ( Max : <%=U.maxRating%> )</h2>
+    <div class="col-sm Rating_Link">
+      <h2>Rating : <%=U.rating%> </h2>
+      <h2>(Max : <%=U.maxRating%>)</h2>
       <div class="options">
         <a href="#myTabContent"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p>  </a>
       </div>
@@ -94,34 +96,40 @@
       </div>
     </form>
   <div class="box">
-      <% if(!profSearched){ %>
+      <% if(U.friends.length>0){ %>
+        <% if(!profSearched){ %>
         <div class="sortOption">
 
           <form class="" action="/Home/sort/1" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-a-z"></i>&ensp;Alphabetical Order</span></button></form>
           <form class="" action="/Home/sort/2" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-wide-short"></i>&ensp;High to low rating</span></button></form>
         </div>
-    <% U.friends.forEach(function(UN,index){ %>
-      <form class="tileForm" action="/Home/Search" method="post">
-        <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
-            <input type="hidden" name="host" value="<%=U.handle%>">
-            <input type="hidden" name="searchTarget" value="<%=UN%>">
-            <input type="hidden" name="FRD" value="<%=UN%>">
-            <h3 class="UN"> <%=UN%></h3>
-            <button class="infoBTN" type="submit" onclick="submit" name="button"><i class="fa-solid fa-id-card"></i></button>
-            <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
-            <hr class="sep">
-            <h5 class="CR"><%= U.Fr[UN][0] %></h5>
-        </div>
-      </form>
+        <% U.friends.forEach(function(UN,index){ %>
+          <form class="tileForm" action="/Home/Search" method="post">
+            <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
+                <input type="hidden" name="host" value="<%=U.handle%>">
+                <input type="hidden" name="searchTarget" value="<%=UN%>">
+                <input type="hidden" name="FRD" value="<%=UN%>">
+                <h3 class="UN"> <%=UN%></h3>
+                <button class="infoBTN" type="submit" onclick="submit" name="button"><i class="fa-solid fa-id-card"></i></button>
+                <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
+                <hr class="sep">
+                <h5 class="CR"><%= U.Fr[UN][0] %></h5>
+            </div>
+          </form>
 
-    <% })}%>
+        <% })}%>
+      <% } else {%>
+        <div class="noFRD">
+          <img class="noFRDimg" src="noFRD.png" alt="There are no Friends Currently..">
+        </div>
+        <% } %>
   </div>
   </div>
 
   <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Stats" role="tabpanel" aria-labelledby="Stats-tab">
     <div class="box">
       <div class="ratingGraph">
-        <canvas id="myChart"></canvas>
+        <canvas class="myChartClass" id="myChart"></canvas>
       </div>
       <div class="statContainer">
         <% U.stats.forEach(function(set,index){ %>
@@ -147,7 +155,7 @@
   <%- include('miniprof',{user: profile.result[0],isFriend:isFriend,host:U}) %>
   <% }else if(isErr){ %>
     <div class="err1 mx-auto">
-      <img src="./public/er.png" class="errIMG" alt="">
+      <img src="er.png" class="errIMG" alt="">
     </div>
     <% } %>
 
@@ -155,6 +163,9 @@
 </div>
 
 <script>
+  if (document.getElementById("fixed") == document.activeElement) {
+    document.getElementById("fixed").class += "absolute"
+}
   function hideShowPassword(){
     const password = document.getElementById('password');
     if(password.getAttribute('type')==="password")password.setAttribute('type', "text");
@@ -166,11 +177,14 @@
   var animation;
   function getGraph()
   {
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     const list = <%- JSON.stringify(U.ratingsList) %>;
+    Chart.register(ChartDataLabels);
   const ctx = document.getElementById('myChart');
   const down = (ctx, value) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
   const up = (ctx, value) => ctx.p0.parsed.y < ctx.p1.parsed.y ? value : undefined;
-  Chart.defaults.font.size = 14;
+  if(width<=400)Chart.defaults.font.size = 8;
+  else Chart.defaults.font.size = 14;
   const totalDuration = 1000;
   const delayBetweenPoints = totalDuration / list.length;
   const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
@@ -206,9 +220,11 @@
 
   const myChart = new Chart(ctx, {
     type: 'line',
+
   data: {
+    labels: list.map(a => a.x),
     datasets: [{
-      data: list,
+      data: list.map(a => a.y),
       borderWidth: 3,
       segment: {
           borderColor: ctx => up(ctx,"#14E114") || down(ctx,"#F04854")
@@ -225,14 +241,34 @@
       title: {
         display: true,
         text: 'Contest Performance'
+      },
+      datalabels: {
+        display: false,
+      backgroundColor: "#00735C",
+      borderColor: "#EDF0EE",
+      borderWidth: 1,
+      borderRadius: 10,
+      color: 'white',
+        font: {
+          size: 8,
+          weight: 'normal'
+        },
+        formatter: Math.round,
+        anchor: "end",
+        align: "top",
+
       }
     },
       scales: {
-            y: {grid: {display: false,borderWidth: 3,borderColor: "#21B6A8"},beginAtZero: true},
-            x: {grid: {display: true,borderWidth: 3,borderColor: "#21B6A8"}}
-            }
-    }
-  })
-  }
+            y: {grid: {display: false,borderWidth: 3,borderColor: "#21B6A8"},
+            beginAtZero: true},
+            x: {
+              grid: {display: true,borderWidth: 3,borderColor: "#21B6A8"},
+              ticks: {display:(width>=400)}
+              }
+          }
+        }
+    })
+}
 </script>
 <%- include('partials/footer') %>

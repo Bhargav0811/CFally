@@ -5,7 +5,7 @@
     window.scrollTo({ top:0, left:0, behavior: "instant"});
   </script>
 <div id="loader">
-    <img class="preimg" src="./public/logoG.gif" alt="Loading..">
+    <img class="preimg" src="logoG.gif" alt="Loading..">
 </div>
 <% } %>
 
@@ -14,7 +14,7 @@
 <nav class="navbar navbar-dark bg-dark justify-content-between">
   <div class="row">
     <div class="col-sm nav1">
-      <img class="LogoF" src="./public/logoFN.png" alt="Logo">
+      <img class="LogoF" src="logoFN.png" alt="Logo">
     </div>
     <div class="col-lg nav2">
       <form class="form-inline" method="post" action="/Home">
@@ -80,7 +80,7 @@
     <%- include('miniprof',{user: profile.result[0],isFriend:isFriend,host:profile.result[0]}) %>
     <% }else if(isErr){ %>
       <div class="err mx-auto">
-        <img src="./public/er.png" class="errIMG" alt="">
+        <img src="er.png" class="errIMG" alt="">
       </div>
 
       <% } %>
@@ -90,6 +90,9 @@
 </div>
 
 <script type="text/javascript">
+  if (document.getElementById("fixed") == document.activeElement) {
+    document.getElementById("fixed").class += "absolute"
+}
   function hideShowPassword(){
     const password = document.getElementById('password');
     if(password.getAttribute('type')==="password")password.setAttribute('type', "text");
