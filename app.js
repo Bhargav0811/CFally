@@ -6,9 +6,9 @@ const bodyp = require("body-parser");
 const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 const ejs = require("ejs");
-const session = require("express-session");
+// const session = require("express-session");
 const findOrCreate = require("mongoose-findorcreate");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const { plot } = require("plot");
 require("@plotex/render-image");
 const fs = require("fs");
@@ -28,6 +28,12 @@ var $ = require("jquery")(window);
 // const { JSDOM } = jsdom;
 // var jsdom = require('jsdom');
 var request = require('request');
+
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
+
+
 
 
 // global.document = new JSDOM(html).window.document;
@@ -53,13 +59,6 @@ const app = exp();
 app.use(exp.static("public"));
 app.set("view engine","ejs");
 app.use(bodyp.urlencoded({extended : true}));
-
-app.use(session({
-    secret: "SecretKey",
-    saveUninitialized:true,
-    cookie: { tab: 1,loadLogo: true,isErr: false,profile: {result:[]}},
-    resave: false
-}));
 
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -111,6 +110,7 @@ var profSearched = false;
 var warningMSG = "";
 var isFriend = 0;
 var scrollPg = false;
+var loginType = 0;
 
 var dom;
 
@@ -154,7 +154,7 @@ app.get("/Home",function(req,res){
 
   if(loggedIn) {
     if(profSearched){loadLogo=false;}
-    res.render("Dash",{U:P,tab:1,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
+    res.render("Dash",{U:P,tab:1,loginType:loginType,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
     //   document =  (new JSDOM(result)).window.document;
     //   global.document = document;
   }
@@ -226,6 +226,7 @@ app.post("/Home",function(req,res){
         U1.save();
         saveUserData(userN,[],function(){
           loggedIn = true;
+          loginType = 2;
           res.redirect("/Home");
         });
         // request({
@@ -249,6 +250,7 @@ app.post("/Home",function(req,res){
                 logFailed = true;
                 if(loggedIn){
                   P = temp;
+                  loginType = 3;
                   res.redirect("/Home");}
                 else {P={};res.redirect("/");}
               }
@@ -257,6 +259,7 @@ app.post("/Home",function(req,res){
                 P.friends =  docs[0].friends
                 saveUserData(userN,docs[0].friends,function(){
                   loggedIn = true;
+                  loginType = 1;
                   res.redirect("/Home");
                 });
 
@@ -319,7 +322,7 @@ function saveUserData(userN,arr,callback){
       P.friends.forEach(function(I,index){
         Frs+=I+";";
       });
-      console.log(Frs);
+      // console.log(Frs);
       if(Frs===""){if (typeof callback == "function"){callback();}}
       else
       {

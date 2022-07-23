@@ -29,7 +29,7 @@
             <label class="form-check-label" >Change User</label>
           </div>
           <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
-  <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'CF ID'%>" autocomplete="on">
+  <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF UserName" autocomplete="on">
   <input type="password" id="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password"><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
 
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
@@ -44,6 +44,9 @@
 
 
 </nav>
+<div class="fade alert alrt1 alert-success" role="alert">Logged In as <%=U.handle%></div>
+<div class="fade alert alrt2 alert-dark" role="alert">Signed Up as <%=U.handle%></div>
+<div class="fade alert alrt3 alert-danger" role="alert">Invalid Credentials</div>
 <div style="<%=profSearched===true?'filter: blur(20px);pointer-events: none;user-select: none':''%>" class="contain" id="blur">
 
 <div class="prof"  style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
@@ -66,14 +69,14 @@
       <h2>Rating : <%=U.rating%> </h2>
       <h2>(Max : <%=U.maxRating%>)</h2>
       <div class="options">
-        <a href="#myTabContent"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p>  </a>
+        <a href="#myTabContent"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p></a>
       </div>
 
     </div>
   </div>
 </div>
 </div>
-<div>
+<div class="dashInfo">
 <div class="tabs">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
@@ -163,9 +166,21 @@
 </div>
 
 <script>
-  if (document.getElementById("fixed") == document.activeElement) {
-    document.getElementById("fixed").class += "absolute"
-}
+  var k=<%-loginType%>
+  if(k>=1 && k<=3)generateAlert(k)
+  function generateAlert(a){
+    $(".alrt"+a).addClass("in");
+    setTimeout(() => {
+      $(".alrt"+a).removeClass("in");
+},4000);
+  }
+  $(document).ready(function(){
+    document.ontouchmove=function(e){e.preventDefault();}
+  });
+  input.onfocus = function(){
+    window.scrollTo(0,0);
+    document.body.scrollTop = 0;
+  }
   function hideShowPassword(){
     const password = document.getElementById('password');
     if(password.getAttribute('type')==="password")password.setAttribute('type', "text");

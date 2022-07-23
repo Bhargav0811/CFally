@@ -25,7 +25,7 @@
             <label class="form-check-label" >Login</label>
           </div>
           <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
-          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="<%=logFailed?'Invalid Username':'CF ID'%>" autocomplete="on">
+          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF UserName" autocomplete="on">
           <input id="password" type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password" /><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
         </div>
@@ -34,7 +34,10 @@
   </div>
 
 </nav>
+
+
 <div>
+  <div class="fade alert alrt3 alert-danger" role="alert">Invalid Credentials</div>
 <div class="tabs">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
@@ -100,6 +103,16 @@
     const iconClass = document.getElementById('togglePassword').classList
     iconClass.toggle('fa-eye');
     iconClass.toggle('fa-eye-slash');
+  }
+
+  <% if(logFailed){%>
+    generateAlert(3)
+  <% } %>
+  function generateAlert(a){
+    $(".alrt"+a).addClass("in");
+    setTimeout(() => {
+      $(".alrt"+a).removeClass("in");
+},3000);
   }
 </script>
 
