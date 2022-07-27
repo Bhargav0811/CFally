@@ -1,12 +1,8 @@
 <%- include('partials/header') %>
 
-<% if(scrollPg){ %>
-<script type="text/javascript">
-  window.onload = function(e){
-    window.location.hash = '#myTabContent';
-}
-</script>
-<% } %>
+
+
+
 <% if(loadLogo){ %>
   <script type="text/javascript">
     window.scrollTo({ top:0, left:0, behavior: "instant"});
@@ -23,14 +19,17 @@
     <div class="col-lg nav2">
       <form class="form-inline" method="post" action="/Home">
         <div id="loginData" class="login">
-          <div class="form-check form-switch typeDash">
-            <label class="form-check-label">Create New account</label>
-            <input name="OPT" class="form-check-input" id="OPTbtn" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked="false">
-            <label class="form-check-label" >Change User</label>
+          <div class="OPTswitch typeDash">
+              <input name="OPT" type="checkbox" checked data-toggle="switchbutton" data-on="Login" data-off="Signup" data-onstyle="warning" data-offstyle="info">
           </div>
+          <!-- <div class="form-check form-switch typeDash">
+            <label class="form-check-label">Sign up</label>
+            <input name="OPT" class="form-check-input" id="OPTbtn" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked="false">
+            <label class="form-check-label" >Login</label>
+          </div> -->
           <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
-  <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF UserName" autocomplete="on">
-  <input type="password" id="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password"><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
+  <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF Username" autocomplete="on" required>
+  <input type="password" id="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" required autocomplete="off" placeholder="Password"><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
 
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
         </div>
@@ -47,7 +46,8 @@
 <div class="fade alert alrt1 alert-success" role="alert">Logged In as <%=U.handle%></div>
 <div class="fade alert alrt2 alert-dark" role="alert">Signed Up as <%=U.handle%></div>
 <div class="fade alert alrt3 alert-danger" role="alert">Invalid Credentials</div>
-<div style="<%=profSearched===true?'filter: blur(20px);pointer-events: none;user-select: none':''%>" class="contain" id="blur">
+<div class="fade alert alrt4 alert-dark" role="alert">Account already exists</div>
+<div style="<%=U.profSearched===true?'filter: blur(20px);pointer-events: none;user-select: none':''%>" class="contain" id="blur">
 
 <div class="prof"  style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
   <div class="container">
@@ -69,7 +69,7 @@
       <h2>Rating : <%=U.rating%> </h2>
       <h2>(Max : <%=U.maxRating%>)</h2>
       <div class="options">
-        <a href="#myTabContent"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p></a>
+        <a onclick="scrollPage()"><i class="proico fa-solid fa-circle-info"></i><p class="proico">&ensp;More Info</p></a>
       </div>
 
     </div>
@@ -92,7 +92,7 @@
   <div  class="show active tab-pane Frs fade <%= tab===1?'show active':''%>" id="Friend" role="tabpanel" aria-labelledby="Friend-tab">
     <form class="search user searchtab" action="/Home/Search" method="post">
       <div class="Searchbox">
-        <input id="ProfSearch" type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <input required id="ProfSearch" type="search" class="form-control rounded sbox" name="searchTarget" placeholder="New Friends" aria-label="Search" aria-describedby="search-addon" />
         <button type="submit"  onclick="submit" class="input-group-text border-0" id="search-addon">
           <i class="fas fa-search"></i>
         </button>
@@ -100,7 +100,7 @@
     </form>
   <div class="box">
       <% if(U.friends.length>0){ %>
-        <% if(!profSearched){ %>
+        <% if(!U.profSearched){ %>
         <div class="sortOption">
 
           <form class="" action="/Home/sort/1" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-a-z"></i>&ensp;Alphabetical Order</span></button></form>
@@ -114,9 +114,9 @@
                 <input type="hidden" name="FRD" value="<%=UN%>">
                 <h3 class="UN"> <%=UN%></h3>
                 <button class="infoBTN" type="submit" onclick="submit" name="button"><i class="fa-solid fa-id-card"></i></button>
-                <img class="pic" src="<%= U.Fr[UN][1] %>" alt="">
+                <img class="pic" src="<%= (U.Fr[UN])?U.Fr[UN][1]:'' %>" alt="">
                 <hr class="sep">
-                <h5 class="CR"><%= U.Fr[UN][0] %></h5>
+                <h5 class="CR"><%= (U.Fr[UN])?U.Fr[UN][0]:'' %></h5>
             </div>
           </form>
 
@@ -148,7 +148,7 @@
 </div>
 </div>
 </div>
-<div style="<%=profSearched===true?'top: 50%;visibility: visible;opacity: 1;transform: 0.5s;width: 40%;':''%>"  class="searchResult">
+<div style="<%=U.profSearched===true?'top: 50%;visibility: visible;opacity: 1;transform: 0.5s;width: 40%;':''%>"  class="searchResult">
   <form class="closeSearchedProf" action="/Home/Search" method="post">
     <button class="closeBTN" type="submit" onclick="submit" class="input-group-text border-0" id="search-addon">
       <i class="fa-solid fa-circle-xmark"></i>
@@ -167,19 +167,27 @@
 
 <script>
   var k=<%-loginType%>
-  if(k>=1 && k<=3)generateAlert(k)
+  if(k>=1 && k<=4)generateAlert(k)
   function generateAlert(a){
     $(".alrt"+a).addClass("in");
     setTimeout(() => {
       $(".alrt"+a).removeClass("in");
 },4000);
   }
-  $(document).ready(function(){
-    document.ontouchmove=function(e){e.preventDefault();}
-  });
-  input.onfocus = function(){
-    window.scrollTo(0,0);
-    document.body.scrollTop = 0;
+  // $(document).ready(function(){
+  //   document.ontouchmove=function(e){e.preventDefault();}
+  // });
+  // input.onfocus = function(){
+  //   window.scrollTo(0,0);
+  //   document.body.scrollTop = 0;
+  // }
+  <% if(scrollPg){ %>
+    scrollPage();
+    <% } %>
+      // window.location.hash = '#myTabContent';
+  function scrollPage()
+  {
+    $('#myTabContent')[0].scrollIntoView(true);
   }
   function hideShowPassword(){
     const password = document.getElementById('password');

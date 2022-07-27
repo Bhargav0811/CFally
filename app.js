@@ -105,8 +105,8 @@ var loadLogo = true;
 var isErr= false;
 var profile = {result:[]}
 var logFailed = false;
-var loggedIn = false;
-var profSearched = false;
+// var loggedIn = false;
+// var profSearched = false;
 var warningMSG = "";
 var isFriend = 0;
 var scrollPg = false;
@@ -115,8 +115,17 @@ var loginType = 0;
 var dom;
 
 app.get("/",function(req,res){
-  if(loggedIn){loadLogo=true;loggedIn=false;logFailed=false;isFriend=0;}
-  res.render("home",{profile:profile,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed,isFriend:isFriend})
+  if(P.loggedIn){loadLogo=true;P.loggedIn=false;logFailed=false;isFriend=0;}
+  // if(!P.profSearched){profile = {result:[]};}
+  res.render("home",{profile:profile,loginType:loginType,loadLogo:loadLogo,tab:tab,isErr:isErr,logFailed:logFailed,isFriend:isFriend})
+  profile = {result:[]};
+  tab=1;
+  // profSearched=false;
+  // P.loggedIn=false;
+  isErr=false;
+  loadLogo=true;
+  isFriend=0;
+  loginType=0;
 })
 app.post("/",function(req,res){
   res.redirect("/");
@@ -152,13 +161,26 @@ var backList = [];
 
 app.get("/Home",function(req,res){
 
-  if(loggedIn) {
-    if(profSearched){loadLogo=false;}
-    res.render("Dash",{U:P,tab:1,loginType:loginType,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profSearched:profSearched,profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
+  if(P.loggedIn) {
+    if(P.profSearched){loadLogo=false;}
+    // console.log(P);
+    res.render("Dash",{U:P,tab:1,loginType:loginType,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
+    loginType=0;
+    scrollPg=false;
+    profile = {result:[]};
+    isErr=false;
+    loadLogo=true;
+    isFriend=0;
+    loginType=0;
     //   document =  (new JSDOM(result)).window.document;
     //   global.document = document;
   }
   else{ res.redirect("/")}
+})
+
+app.get("/:temp",function(req,res){
+  if(P.loggedIn)res.redirect("/Home");
+  else res.redirect("/");
 })
 
 function toggle() {
@@ -184,13 +206,13 @@ app.post("/Home/removeFrd",function(req,res){
   })
   loadLogo=false;
   scrollPg=true;
-  profSearched=false;
+  P.profSearched=false;
   res.redirect("/Home");
 })
 
 app.post("/Home",function(req,res){
   // console.log(req.body);
-  if(profSearched)
+  if(P.profSearched && req.body)
   {
     // console.log(P.friends);
     P.friends.push(req.body.F2);
@@ -204,15 +226,25 @@ app.post("/Home",function(req,res){
       }
     })
     isFriend=1;
-    profSearched=false;
+    P.profSearched=false;
+    scrollPg=true;
+    loadLogo=false;
     res.redirect("/Home")
 
   }
   else
   {
-    var Signup = false;
-  var userN = req.body.UN;
-  var pass = req.body.PS;
+  var userN = req.body.UN.trim();
+  var pass = req.body.PS.trim();
+  if(P.handle && userN===P.handle)
+  {
+    logFailed=false;
+    loginType=0;
+    loadLogo=false;
+    if(P.loggedIn)res.redirect("/Home");
+    else res.redirect("/");
+  }
+  else{
   getJSON('https://codeforces.com/api/user.info?handles='+userN,function(err,data){
     if(err===null)
     {
@@ -222,13 +254,37 @@ app.post("/Home",function(req,res){
       // console.log("Data Fetched")
       if(!('OPT' in req.body))
       {
-        const U1 = new user({username:userN,password:pass,friends:[]})
-        U1.save();
-        saveUserData(userN,[],function(){
-          loggedIn = true;
-          loginType = 2;
-          res.redirect("/Home");
-        });
+        user.find({username:userN},function (err, docs){
+          if (err)console.log(err);
+          else{
+            // console.log(docs)
+            if(docs.length===0)
+            {
+              const U1 = new user({username:userN,password:pass,friends:[]})
+              U1.save();
+              saveUserData(userN,[],function(){
+                P.loggedIn = true;
+                loginType = 2;
+                res.redirect("/Home");
+              });
+            }
+            else
+            {
+              profile = {result:[]};
+              loadLogo = false;
+              tab = 1;
+              isErr= false;
+              logFailed = true;
+              loginType = 4;
+              if(temp.loggedIn){
+                P = temp;
+                res.redirect("/Home");}
+              else {P={};res.redirect("/");}
+            }
+
+            }
+        })
+
         // request({
         // url: '/Home',
         // method: 'POST',
@@ -248,18 +304,20 @@ app.post("/Home",function(req,res){
                 tab = 1;
                 isErr= false;
                 logFailed = true;
-                if(loggedIn){
+                loginType = 3;
+                if(temp.loggedIn){
                   P = temp;
-                  loginType = 3;
                   res.redirect("/Home");}
                 else {P={};res.redirect("/");}
               }
               else
               {
-                P.friends =  docs[0].friends
+                // P.friends =  docs[0].friends;
+
                 saveUserData(userN,docs[0].friends,function(){
-                  loggedIn = true;
+                  P.loggedIn = true;
                   loginType = 1;
+                  loadLogo=true;
                   res.redirect("/Home");
                 });
 
@@ -279,10 +337,11 @@ app.post("/Home",function(req,res){
       tab = 1;
       isErr= false;
       logFailed = true;
-      if(loggedIn)res.redirect("/Home");
+      if(P.loggedIn)res.redirect("/Home");
       else res.redirect("/");
     }
     }).catch(error => {console.log(error)})
+  }
   }
 })
 
@@ -344,7 +403,8 @@ function saveUserData(userN,arr,callback){
 }
 
 app.post("/Home/sort/:option",function(req,res){
-  // console.log(P.friends)
+  // console.log(P);
+  // console.log(P.friends);
   if(req.params.option==="1")
   {
     P.friends =  P.friends.sort((a, b) => {
@@ -362,25 +422,40 @@ app.post("/Home/sort/:option",function(req,res){
 })
 
 app.post("/Home/Search",function(req,res){
-  if(profSearched===true)
+  if(P.profSearched===true)
   {
     profile = {result:[]};
-    profSearched=false;
+    P.profSearched=false;
+    loginType=0;
+    loadLogo=false;
     res.redirect("/Home");
   }
   else
   {
     var target = req.body.searchTarget;
-    profSearched = true;
-    // var type = req.body['options-outlined']
-    // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
-    searchProf(target,function(){
-      // console.log("Redirecting to Home")
-      if(P.handle===target)isFriend=0;
-      else if(P.friends.includes(target))isFriend=1;
-      else isFriend=2;
+    if(target)
+    {
+      P.profSearched = true;
+      // var type = req.body['options-outlined']
+      // console.log(tab,loadLogo ,isErr, profile, logFailed ,loggedIn ,profSearched)
+      searchProf(target,function(){
+        // console.log("Redirecting to Home")
+        if(P.handle===target)
+        {
+          P.profSearched=false;
+          loadLogo=false;
+        }
+        else if(P.friends.includes(target))isFriend=1;
+        else isFriend=2;
+        loginType=0;
+        res.redirect("/Home");
+      });
+    }
+    else
+    {
       res.redirect("/Home");
-    });
+    }
+
   }
 })
 
@@ -406,13 +481,7 @@ function searchProf(target,callback)
       logFailed=false;
     }
     if (typeof callback == "function"){callback();}
-    }).catch(error => {
-    console.log(error)
-  })
-}
-function changeTab(a)
-{
-  tab=a;
+    }).catch(error => {console.log(error)})
 }
 
 var st = []

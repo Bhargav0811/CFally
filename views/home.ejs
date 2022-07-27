@@ -19,14 +19,17 @@
     <div class="col-lg nav2">
       <form class="form-inline" method="post" action="/Home">
         <div id="loginData" class="login">
-          <div class="form-check form-switch typeHome">
+          <div class="OPTswitch typeHome">
+              <input name="OPT" type="checkbox" checked data-toggle="switchbutton" data-on="Login" data-off="Signup" data-onstyle="warning" data-offstyle="info">
+          </div>
+          <!-- <div class="form-check form-switch typeHome">
             <label class="form-check-label">Sign up</label>
             <input name="OPT" class="form-check-input" id="OPTbtn" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked="false">
             <label class="form-check-label" >Login</label>
-          </div>
+          </div> -->
           <!-- <input value="Signup" name="OPT" type="checkbox" id="OPTbtn" class="loginB"  checked data-toggle="toggle" data-on="Signup" data-off="Login" data-onstyle="warning" data-offstyle="info"> -->
-          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF UserName" autocomplete="on">
-          <input id="password" type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password" /><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
+          <input name="UN" class="form-control my-auto mr-sm-2 loginF" type="text" placeholder="CF Username" autocomplete="on" required>
+          <input required id="password" type="password" class="form-control my-auto mr-sm-2 loginF" name="PS" value="" autocomplete="off" placeholder="Password" /><i onclick="hideShowPassword()" id="togglePassword" class="fa-solid fa-eye-slash"></i>
           <button onclick="submit" class="btn btn-outline-success my-auto my-sm-0" type="submit">Enter</button>
         </div>
       </form>
@@ -38,6 +41,7 @@
 
 <div>
   <div class="fade alert alrt3 alert-danger" role="alert">Invalid Credentials</div>
+  <div class="fade alert alrt4 alert-dark" role="alert">Account already exists</div>
 <div class="tabs">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
@@ -57,19 +61,19 @@
   <div class="tab-pane fade <%= tab===2?'show active':''%>" id="Explore" role="tabpanel" aria-labelledby="Explore-tab">
     <form class="search user searchtab" action="/search" method="post">
       <div class="Searchbox">
-        <input type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <input required type="search" class="form-control rounded sbox" name="searchTarget" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
         <button type="submit" onclick="submit" class="input-group-text border-0" id="search-addon">
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="tags">
+      <!-- <div class="tags">
         <input type="radio" onchange="changeType(handle)" value="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
         <label class="btn btn-outline-success tag" for="T1">By Username</label>
         <input type="radio"  onchange="changeType(organisation)" value="organisation" class="btn-check" name="options-outlined" id="T2" autocomplete="off">
         <label class="btn btn-outline-success tag" for="T2">By Organisation</label>
         <input type="radio" onchange="changeType(city)"  value="city" class="btn-check" name="options-outlined" id="T3" autocomplete="off">
         <label class="btn btn-outline-success tag" for="T3">By City</label>
-      </div>
+      </div> -->
 
       <!-- <input type="radio" name="handle" class="btn-check" name="options-outlined" id="T1" autocomplete="off" checked>
       <label class="btn btn-outline-success tag" for="T1">By Username</label>
@@ -86,7 +90,11 @@
         <img src="er.png" class="errIMG" alt="">
       </div>
 
-      <% } %>
+      <% }else{ %>
+        <div class="sear mx-auto">
+          <img src="search.png" class="errIMG" alt="">
+        </div>
+        <% } %>
   </div>
 </div>
 
@@ -106,7 +114,8 @@
   }
 
   <% if(logFailed){%>
-    generateAlert(3)
+    var k=<%-loginType%>
+    if(k>=3 && k<=4)generateAlert(k)
   <% } %>
   function generateAlert(a){
     $(".alrt"+a).addClass("in");
