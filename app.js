@@ -157,14 +157,15 @@ var Backs = [
 "90deg, #FEE140 0%, #FA709A 100%" ]
 
 var P = {};
+var CU = {};
 var backList = [];
 
 app.get("/Home",function(req,res){
 
   if(P.loggedIn) {
     if(P.profSearched){loadLogo=false;}
-    // console.log(P);
-    res.render("Dash",{U:P,tab:1,loginType:loginType,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
+    // console.log(CU);
+    res.render("Dash",{CU:CU,U:P,tab:1,loginType:loginType,loadLogo:loadLogo,logFailed:false,back:Backs,backList:backList.slice(0,6),profile:profile,isErr:isErr,isFriend:isFriend,scrollPg:scrollPg})
     loginType=0;
     scrollPg=false;
     profile = {result:[]};
@@ -196,8 +197,9 @@ function toggle() {
 }
 
 app.post("/Home/removeFrd",function(req,res){
-  P.friends.splice(P.friends.indexOf(req.body.F2),1);
-  user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
+  // P.friends.splice(P.friends.indexOf(req.body.F2),1);
+  CU[req.body.F1].friends.splice(CU[req.body.F1].friends.indexOf(req.body.F2),1);
+  user.updateOne({username:req.body.F1},{friends:CU[req.body.F1].friends},function(err,docs){
     if (err)console.log(err);
     else{
       // console.log("Updated Succesfully");
@@ -215,10 +217,12 @@ app.post("/Home",function(req,res){
   if(P.profSearched && req.body)
   {
     // console.log(P.friends);
-    P.friends.push(req.body.F2);
-    P.Fr[req.body.F2] = [req.body.F2rating,req.body.F2image]
+    // P.friends.push(req.body.F2);
+    CU[req.body.F1].friends.push(req.body.F2)
+    // P.Fr[req.body.F2] = [req.body.F2rating,req.body.F2image]
+    CU[req.body.F1].Fr[req.body.F2] = [req.body.F2rating,req.body.F2image]
     // console.log(P.friends);
-    user.updateOne({username:req.body.F1},{friends:P.friends},function(err,docs){
+    user.updateOne({username:req.body.F1},{friends:CU[req.body.F1].friends},function(err,docs){
       if (err)console.log(err);
       else{
         // console.log("Updated Succesfully");
@@ -264,6 +268,8 @@ app.post("/Home",function(req,res){
               U1.save();
               saveUserData(userN,[],function(){
                 P.loggedIn = true;
+                var UN = P.handle;
+                CU[UN] = P;
                 loginType = 2;
                 res.redirect("/Home");
               });
@@ -307,6 +313,8 @@ app.post("/Home",function(req,res){
                 loginType = 3;
                 if(temp.loggedIn){
                   P = temp;
+                  var UN = P.handle;
+                  CU[UN] = P;
                   res.redirect("/Home");}
                 else {P={};res.redirect("/");}
               }
@@ -316,6 +324,8 @@ app.post("/Home",function(req,res){
 
                 saveUserData(userN,docs[0].friends,function(){
                   P.loggedIn = true;
+                  var UN = P.handle;
+                  CU[UN] = P;
                   loginType = 1;
                   loadLogo=true;
                   res.redirect("/Home");

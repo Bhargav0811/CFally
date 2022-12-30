@@ -36,6 +36,7 @@
       </form>
 
       <form class="logOut" class="" action="/" method="get">
+        <input type="hidden" name="username" value="<%=U.handle%>">
         <button onclick="submit" class="LogoutBTN" type="submit"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
       </form>
     </div>
@@ -99,14 +100,14 @@
       </div>
     </form>
   <div class="box">
-      <% if(U.friends.length>0){ %>
+      <% if(CU[U.handle].friends.length>0){ %>
         <% if(!U.profSearched){ %>
         <div class="sortOption">
 
           <form class="" action="/Home/sort/1" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-a-z"></i>&ensp;Alphabetical Order</span></button></form>
           <form class="" action="/Home/sort/2" method="post"><button class="btn btn-light sortBTN" type="submit" onclick="submit"><span><i class="fa-solid fa-arrow-down-wide-short"></i>&ensp;High to low rating</span></button></form>
         </div>
-        <% U.friends.forEach(function(UN,index){ %>
+        <% CU[U.handle].friends.forEach(function(UN,index){ %>
           <form class="tileForm" action="/Home/Search" method="post">
             <div class="tile" style="background-image: linear-gradient(<%=back[Math.floor(Math.random() * back.length)]%>)">
                 <input type="hidden" name="host" value="<%=U.handle%>">
@@ -114,9 +115,9 @@
                 <input type="hidden" name="FRD" value="<%=UN%>">
                 <h3 class="UN"> <%=UN%></h3>
                 <button class="infoBTN" type="submit" onclick="submit" name="button"><i class="fa-solid fa-id-card"></i></button>
-                <img class="pic" src="<%= (U.Fr[UN])?U.Fr[UN][1]:'' %>" alt="">
+                <img class="pic" src="<%= (CU[U.handle].Fr[UN])?CU[U.handle].Fr[UN][1]:'' %>" alt="">
                 <hr class="sep">
-                <h5 class="CR"><%= (U.Fr[UN])?U.Fr[UN][0]:'' %></h5>
+                <h5 class="CR"><%= (CU[U.handle].Fr[UN])?CU[U.handle].Fr[UN][0]:'' %></h5>
             </div>
           </form>
 
