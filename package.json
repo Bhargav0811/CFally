@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "engine":{
+  "engine": {
     "node": "16.15.1"
   },
   "dependencies": {
@@ -45,11 +45,10 @@
     "plotly.js-dist-min": "^2.12.1",
     "request": "^2.88.2",
     "scroll-to-element": "^2.0.3",
-    "url-json-parser": "^1.0.3",
     "window": "^4.2.7"
   },
-  "description": "",
   "devDependencies": {
     "@types/plotly.js": "^1.54.22"
-  }
+  },
+  "description": ""
 }
